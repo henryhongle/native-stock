@@ -11,12 +11,11 @@ import {
     Alert
 } from 'react-native';
 
-import StockService from './services/StockService';
-import StockDetail from './components/StockDetail';
-import StockItem from './components/StockItem'
-import API from './API';
-
-const stockService = new StockService();
+import { stockService } from '../services/StockService';
+import StockDetail from '../components/StockDetail';
+import StockItem from '../components/StockItem';
+import SearchBar from '../components/SearchBar';
+import API from '../API';
 
 export default class HomePage extends React.Component {
     constructor(props) {
@@ -24,7 +23,8 @@ export default class HomePage extends React.Component {
         this.state = {
             stocks: [],
             isLoading: false,
-            searchString: '',
+            suggestions: [],
+            searchSelected: null
         };
     }
 
@@ -34,7 +34,6 @@ export default class HomePage extends React.Component {
     }
 
     _fetchStocks = () => {
-        
         stockService.getTickers()
         .then(stocks => {
             this.setState({
@@ -70,66 +69,89 @@ export default class HomePage extends React.Component {
         );
     }
 
+    _renderSuggestionItem = ({item, index}) => {
+        return (
+
+            <TouchableHighlight
+                underlayColor='#dddddd'
+                onPress={this._onSearchSelected.bind(null, item)}
+            >
+                <View style={styles.suggestionContainer}>
+                    <Text style={styles.stock}>{item.symbol}</Text>
+                    <Text style={styles.stock}>{item.name}</Text>
+                </View>
+            </TouchableHighlight>
+            
+        );
+    }
+
+    _onSearchSelected = (item) => {
+        console.log('item', item);
+        this.setState({
+            searchSelected: item,
+            suggestions: []
+        });
+    }
+
     _onPress = (index) => {
         this.props.navigation.navigate('Detail', { stock: this.state.stocks[index] });
     }
 
     _onLongPress = (index) => {
         var stockName = this.state.stocks[index].Symbol.toUpperCase();
-        Alert.alert(`Remove ${stockName}?`, '',
+        Alert.alert('', `Remove ${stockName}?`,
         [
             {text: 'Cancel'},
             {text: 'Delete', onPress: this._deleteStock.bind(this, index)}
         ]);
     }
 
-    _onAddPressed = () => {
-        stockService.addTicker(this.state.searchString)
-        .then(stocks => {
-            this.setState({
-                stocks: stocks,
-                isLoading: false,
-                searchString: ''
-            });
+    _keyExtractor = (item, index) => index;
+
+    _updateSuggestion = (suggestions) => {
+        this.setState({
+            suggestions
         });
     }
 
-    _onTextChanged = (event) => {
+    _updateTickers = (stocks) => {
         this.setState({
-            searchString: event.nativeEvent.text
-        });
-    }
-    
-    _keyExtractor = (item, index) => index;
+            stocks
+        })
+    } 
 
     render() {
         const spinner = this.state.isLoading ? <ActivityIndicator size='large' /> : null;
         return (
             <View style={styles.container}>
-                <View style={styles.inputContainer}>
-                    <TextInput style={styles.searchInput}
-                        placeholder='APPL'
-                        autoCorrect={false}
-                        underlineColorAndroid='transparent'
-                        onChange={this._onTextChanged}
-                    />
-                    <Button
-                        onPress={() => {}}
-                        color='#48BBEC'
-                        title='Add'
-                        onPress={this._onAddPressed}
-                    />
-                </View>
+                <SearchBar
+                    onSearchCompleted={this._updateSuggestion}
+                    onItemSelected={this.state.searchSelected}
+                    onItemAdded={this._updateTickers}
+                />
+
                 {spinner}
-                <View>
-                    <FlatList
-                        data={this.state.stocks}
-                        keyExtractor={this._keyExtractor}
-                        renderItem={this._renderItem}
-                        onRefresh={this._fetchStocks}
-                        refreshing={false}
-                    />
-                </View>
+                { this.state.suggestions.length == 0 
+                    && <View>
+                        <FlatList
+                            data={this.state.stocks}
+                            keyExtractor={this._keyExtractor}
+                            renderItem={this._renderItem}
+                            onRefresh={this._fetchStocks}
+                            refreshing={false}
+                        />
+                    </View>
+                }
+
+                { this.state.suggestions.length != 0
+                    && <View>
+                        <FlatList
+                            data={this.state.suggestions}
+                            keyExtractor={this._keyExtractor}
+                            renderItem={this._renderSuggestionItem}
+                        />
+                    </View>
+                }
             </View>
         );
     };
@@ -168,5 +190,14 @@ const styles = StyleSheet.create({
     separator: {
         height: 1,
         backgroundColor: '#dddddd'
+    },
+
+    suggestionContainer: {
+        padding: 5
+    },
+
+    stock: {
+        fontSize: 12,
+        paddingLeft: 10
     }
 });

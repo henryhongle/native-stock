@@ -115,7 +115,7 @@ const _renderItem = (data) => {
 
 const _keyExtractor = (item, index) => index;
 
-class StockDetail extends React.Component {
+class StockDetail extends React.PureComponent {
     static navigationOptions = ({ navigation }) => ({
         title: navigation.state.params.stock.Symbol
     });
@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
         marginRight: 10,
         marginLeft: 10
     },
-
     itemContainer: {
         padding: 5,
         flex: 1,
@@ -163,18 +162,14 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: '#dddddd'
     },
-
     label: {
         flexGrow: 1
     },
-    
     info: {
         flexGrow: 1,
         justifyContent: 'flex-end',
         textAlign: 'right',
     }
-
-
 });
 
 export default StockDetail;

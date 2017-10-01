@@ -3,11 +3,13 @@ import DatabaseService from './DatabaseService';
 const databaseService = new DatabaseService();
 
 let tickers = [];
+let q_getStocks = 'Select * from yahoo.finance.quotes where symbol in (STOCKS);';
 
-//https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=1min&apikey=demo
-
-var q_getStocks = 'Select * from yahoo.finance.quotes where symbol in (STOCKS);';
+//http://d.yimg.com/aq/autoc?query=f&region=IN&lang=en-US&callback=YAHOO.Finance.SymbolSuggest.ssCallback
 const api = 'https://query.yahooapis.com/v1/public/yql'
+
+let suggestions_api = `http://d.yimg.com/aq/autoc?query=#STOCK#&region=US&lang=en-US`
+
 
 let query_default = {
     q: '',
@@ -41,7 +43,12 @@ function objectToQueryString(obj) {
 }
 
 
-export default class StockService {
+function getSuggestions(ticker) {
+    let q = suggestions_api.replace('#STOCK#', ticker.toUpperCase());
+    return fetch(q);
+}
+
+class StockService {
     constructor() {
         //databaseService.removeAll();
     }
@@ -50,7 +57,6 @@ export default class StockService {
         return databaseService.get()
         .then((data) => {
             tickers = data;
-            console.log('TICKERS', tickers);
             return getTickers(tickers)
             .then(response => {
                 return response.json();
@@ -59,7 +65,6 @@ export default class StockService {
                 return json.query.results.quote || [];
             })
             .catch(error => {
-                console.log(error);
             });
         });
     }
@@ -84,8 +89,28 @@ export default class StockService {
     getDetail(ticker) {
         return getTickers([ticker])
         .then(response => response.json())
-        .then(json => json.qury.results.quote)
+        .then(json => json.query.results.quote)
         .catch(error => 'Something wrong' + error);
     }
+
+    getSuggestions(ticker) {
+        let q = suggestions_api.replace('#STOCK#', ticker.toUpperCase());
+        return fetch(q)
+        .then(response => {
+            return response.json();
+        })
+        .then((json) => {
+            let tickers = json.ResultSet.Result;
+
+            if (tickers && tickers.length !== 0) {
+                return tickers;
+            } else {
+                throw new Error('Invalid ticker');
+            }
+        })
+        .catch( error => error);
+    }
 }
+
+export let stockService = new StockService();
 

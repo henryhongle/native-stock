@@ -1,5 +1,4 @@
 'use strict';
-
 import { AsyncStorage } from 'react-native';
 
 const STOCKS = 'STOCKS';

@@ -5,8 +5,8 @@ import {
 } from 'react-native';
 
 import { StackNavigator, TabNavigator } from 'react-navigation';
-import HomePage from './HomePage';
-import MyStocks from './MyStocks';
+import HomePage from './containers/HomePage';
+import MyStocks from './containers/MyStocks';
 import StockDetail from './components/StockDetail';
 
 const StockStack = StackNavigator(
@@ -19,11 +19,6 @@ const StockStack = StackNavigator(
         },
         Detail: {
             screen: StockDetail
-        }
-    }, 
-    {
-        cardStyle: {
-            paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight
         }
     }
 );
