@@ -71,14 +71,15 @@ export default class HomePage extends React.Component {
 
     _renderSuggestionItem = ({item, index}) => {
         return (
-
             <TouchableHighlight
                 underlayColor='#dddddd'
-                onPress={this._onSearchSelected.bind(null, item)}
-            >
-                <View style={styles.suggestionContainer}>
-                    <Text style={styles.stock}>{item.symbol}</Text>
-                    <Text style={styles.stock}>{item.name}</Text>
+                onPress={this._onSearchSelected.bind(null, item)} >
+                <View>
+                    <View style={styles.suggestionContainer}>
+                        <Text style={styles.stock}>{item.symbol}</Text>
+                        <Text style={styles.stock}>{item.name}</Text>
+                    </View>
+                    <View style={styles.separator} />
                 </View>
             </TouchableHighlight>
             
@@ -170,21 +171,8 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
     },
 
-    searchInput: {
-        padding: 5,
-        margin: 5,
-        height: 32,
-        flexGrow: 1,
-        fontSize: 16,
-        borderWidth: 1,
-        borderColor: '#48BBEC',
-        borderRadius: 8,
-        color: '#48BBEC',
-    },
-
     itemContainer: {
         padding: 5,
-        
     },
 
     separator: {
@@ -197,7 +185,7 @@ const styles = StyleSheet.create({
     },
 
     stock: {
-        fontSize: 12,
+        fontSize: 14,
         paddingLeft: 10
     }
 });

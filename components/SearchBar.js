@@ -9,7 +9,7 @@ import {
     Dimensions
 } from 'react-native';
 import { stockService } from '../services/StockService';
-const SEARCH_DEBOUNCE = 300;
+const SEARCH_DEBOUNCE = 500;
 
 export default class SearchBar extends React.Component {
     constructor(props) {

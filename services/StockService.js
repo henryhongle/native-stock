@@ -4,6 +4,7 @@ const databaseService = new DatabaseService();
 
 let tickers = [];
 let q_getStocks = 'Select * from yahoo.finance.quotes where symbol in (STOCKS);';
+const EXCHANGE_CODES = [ 'ASE', 'NYQ', 'NAS', 'NGM', 'NMS', 'NYS'];
 
 //http://d.yimg.com/aq/autoc?query=f&region=IN&lang=en-US&callback=YAHOO.Finance.SymbolSuggest.ssCallback
 const api = 'https://query.yahooapis.com/v1/public/yql'
@@ -101,9 +102,13 @@ class StockService {
         })
         .then((json) => {
             let tickers = json.ResultSet.Result;
-
             if (tickers && tickers.length !== 0) {
-                return tickers;
+                let usTickers = tickers.filter(ticker => {
+                    if (EXCHANGE_CODES.indexOf(ticker.exch) !== -1) {
+                        return ticker;
+                    }
+                });
+                return usTickers;
             } else {
                 throw new Error('Invalid ticker');
             }
