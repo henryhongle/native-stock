@@ -17,7 +17,8 @@ export default class SearchBar extends React.Component {
         this.state = {
             searchInput: '',
             timeout: null,
-            suggestions: []
+            suggestions: [],
+            isValidTicker: false
         };
     }
 
@@ -25,7 +26,8 @@ export default class SearchBar extends React.Component {
         const { onItemSelected } = nextProps;
         if (onItemSelected && onItemSelected != this.props.onItemSelected) {
             this.setState({
-                searchInput: onItemSelected.symbol
+                searchInput: onItemSelected.symbol,
+                isValidTicker: true
             });
         }
     }
@@ -37,16 +39,9 @@ export default class SearchBar extends React.Component {
             clearTimeout(this.state.timeout);
         }
 
-        input = input.toUpperCase();
         if (input !== '') {
             timeout = setTimeout(() => {
-                stockService.getSuggestions(input)
-                .then( (result) => {
-                    this.props.onSearchCompleted(result);
-                    this.setState({
-                        suggestions: result
-                    });
-                })
+                this._getSuggestions(input);
             }, SEARCH_DEBOUNCE);
         }
 
@@ -58,6 +53,18 @@ export default class SearchBar extends React.Component {
         this.props.onSearchCompleted([]);
     }
 
+    _getSuggestions = (ticker) => {
+        stockService.getSuggestions(ticker)
+        .then( (suggestions) => {
+            this.props.onSearchCompleted(suggestions);
+            const isValidTicker = this._isValidTicker(suggestions, this.state.searchInput);
+            this.setState({
+                suggestions,
+                isValidTicker: isValidTicker
+            });
+        })
+    }
+
     _onAddPressed = () => {
         stockService.addTicker(this.state.searchInput)
         .then(result => {
@@ -67,7 +74,16 @@ export default class SearchBar extends React.Component {
                 searchInput: ''
             });
         });
-    };
+    }
+
+    _isValidTicker(suggestions, ticker) {
+        for (i = 0; i < suggestions.length; i++) {
+            if (suggestions[i].symbol === ticker) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     render() {
         return (
@@ -79,11 +95,13 @@ export default class SearchBar extends React.Component {
                     underlineColorAndroid='transparent'
                     onChangeText={this._onChangeText}
                     value={this.state.searchInput}
+                    autoCapitalize="characters"
                 />
                 <Button
                     color='#48BBEC'
                     title='Add'
                     onPress={this._onAddPressed}
+                    disabled={!this.state.isValidTicker}
                 />
             </View>
         );
