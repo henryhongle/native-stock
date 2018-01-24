@@ -3,11 +3,12 @@ import { createTypes, async } from '../helpers/actionTypes';
 
 export const STOCK = createTypes([
     async('GET_STOCKS'),
-    async('ADD_TICKER')
+    async('ADD_STOCK'),
+    async('DELETE_STOCK')
 ], 'STOCK');
 
-export const getStocks = () => (dispatch, getState) => {
-    dispatch({ type: STOCK.GET_STOCKS });
+export const getStocks = (enableLoading) => (dispatch, getState) => {
+    if (enableLoading) dispatch({ type: STOCK.GET_STOCKS });
     const state = getState();
     const { tickers }  = state.stocks;
 
@@ -28,15 +29,27 @@ export const getStocks = () => (dispatch, getState) => {
     });
 };
 
-export const addTicker = (ticker) => (dispatch, getState) => {
-    dipatch({
-        type: STOCK.ADD_TICKER_SUCCESS,
+export const addStock = (stock) => (dispatch, getState) => {
+    dispatch({
+        type: STOCK.ADD_STOCK,
         payload: {
-            ticker
+            stock
         }
-    })
+    });
+}
 
-    setTimeout(() => {
-        getStock();
-    }, 0);
+export const deleteStock = (index) => (dispatch, getState) => {
+    dispatch({
+        type: STOCK.DELETE_STOCK,
+        payload: {
+            index
+        }
+    });
+
+    dispatch({
+        type: STOCK.DELETE_STOCK_CLEANUP,
+        payload: {
+            index
+        }
+    });
 }

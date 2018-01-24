@@ -18,7 +18,7 @@ import StockItem from '../components/StockItem';
 import SearchBar from '../components/SearchBar';
 import FlashMessage from '../components/FlashMessage';
 import { connect } from 'react-redux';
-import { getStocks } from '../actions/stockActions';
+import { getStocks, addStock, deleteStock } from '../actions/stockActions';
 
 const height = Dimensions.get('window').height;
 
@@ -32,17 +32,41 @@ class HomePage extends React.Component {
     }
 
     componentWillMount() {
-        this.props.fetchStocks();
+        this.props.fetchStocks(true);
     }
 
-    _deleteStock(index) {
-        stockService.removeTicker(index);
-        var newStocks = this.state.stocks.filter((item, i) => { 
-            return index != i;
-        });
+    _onSearchSelected = (item) => {
         this.setState({
-            stocks: newStocks
+            searchSelected: item,
+            suggestions: []
         });
+    }
+
+    _onPress = (index) => {
+        this.props.navigation.navigate('Detail', { stock: this.props.stocks[index] });
+    }
+
+    _onLongPress = (index) => {
+        const stock = this.props.stocks[index].symbol;
+        Alert.alert('', `Remove ${stock}?`,
+        [
+            {text: 'Cancel'},
+            {text: 'Delete', onPress: this.props.deleteStock.bind(this, index)}
+        ]);
+    }
+
+    _keyExtractor = (item, index) => index;
+
+    _updateSuggestion = (suggestions) => {
+        this.setState({
+            suggestions
+        });
+    }
+
+    _addStock = ({symbol}) => {
+        this.props.addStock(symbol);
+        //quick way to update stocks data
+        setTimeout(this.props.fetchStocks.bind(this, false), 0);
     }
 
     _renderItem = ({item, index}) => {
@@ -78,40 +102,6 @@ class HomePage extends React.Component {
         );
     }
 
-    _onSearchSelected = (item) => {
-        this.setState({
-            searchSelected: item,
-            suggestions: []
-        });
-    }
-
-    _onPress = (index) => {
-        this.props.navigation.navigate('Detail', { stock: this.props.stocks[index] });
-    }
-
-    _onLongPress = (index) => {
-        var stockName = this.state.stocks[index].Symbol.toUpperCase();
-        Alert.alert('', `Remove ${stockName}?`,
-        [
-            {text: 'Cancel'},
-            {text: 'Delete', onPress: this._deleteStock.bind(this, index)}
-        ]);
-    }
-
-    _keyExtractor = (item, index) => index;
-
-    _updateSuggestion = (suggestions) => {
-        this.setState({
-            suggestions
-        });
-    }
-
-    _updateTickers = (stocks) => {
-        this.setState({
-            stocks
-        })
-    } 
-
     render() {
         const spinner = this.props.isFetching ? <ActivityIndicator size='large' /> : null;
         return (
@@ -120,7 +110,7 @@ class HomePage extends React.Component {
                 <SearchBar
                     onSearchCompleted={this._updateSuggestion}
                     onItemSelected={this.state.searchSelected}
-                    onItemAdded={this._updateTickers}
+                    onItemAdded={this._addStock}
                 />
 
                 {spinner}
@@ -185,8 +175,16 @@ const mapStatetoProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchStocks: () => {
-            dispatch(getStocks());
+        fetchStocks: (enableLoading) => {
+            dispatch(getStocks(enableLoading));
+        },
+
+        addStock: (stock) => {
+            dispatch(addStock(stock));
+        },
+
+        deleteStock: (index) => {
+            dispatch(deleteStock(index));
         }
     };
 }

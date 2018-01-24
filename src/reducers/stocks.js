@@ -17,7 +17,7 @@ const INITIAL_STATE = {
 const getStocks = (state, action) => {
     const { payload, type } = action;
 
-    switch (action.type) {
+    switch (type) {
         case STOCK.GET_STOCKS:
             return {
                 ...state,
@@ -30,27 +30,53 @@ const getStocks = (state, action) => {
                 ...state,
                 stocks: stocks,
                 isFetching: false
-            }
+            };
 
         case STOCK.GET_STOCKS_ERROR:
             return {
                 ...state,
                 isFetching: false
-            }
+            };
     }
 }
 
-const addTicker = (state, action) => {
+const addStock = (state, action) => {
     const { payload, type } = action;
 
-    switch (action.type) {
-
+    switch (type) {
+        case STOCK.ADD_STOCK:
+            const newTickers = [payload.stock].concat(state.tickers);
+            return {
+                ...state,
+                tickers: newTickers
+            };
     }
 }
 
+const deleteStock = (state, action) => {
+    const { payload, type } = action;
+    
+    switch (type) {
+        case STOCK.DELETE_STOCK:
+            const newTickers = state.tickers.filter((ticker, index) => index !== payload.index);
+            return {
+                ...state,
+                tickers: newTickers
+            };
+
+        case STOCK.DELETE_STOCK_CLEANUP:
+            const newStocks = state.stocks.filter((stock, index) => index !== payload.index);
+            return {
+                ...state,
+                stocks: newStocks
+            };
+    }
+}
 
 let stockReducer = createReducer(INITIAL_STATE, [
-    getStocks
+    getStocks,
+    addStock,
+    deleteStock
 ]);
 
 export default stockReducer;

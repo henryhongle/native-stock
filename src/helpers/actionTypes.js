@@ -13,10 +13,11 @@ export function createTypes(types, namespace, separator = '.') {
     return typeObj;
 }
 
-export function async(type, fail = 'FAIL', success = 'SUCCESS') {
+export function async(type, fail = 'FAIL', success = 'SUCCESS', clean = 'CLEANUP') {
     return [
         type,
         `${type}_${fail}`,
-        `${type}_${success}`
+        `${type}_${success}`,
+        `${type}_${clean}`
     ];
 }

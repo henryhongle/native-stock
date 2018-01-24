@@ -10,6 +10,7 @@ function getTickers(stocks) {
     let queryString = stocks.reduce((query,stock) => {
         return query + "," + stock.toUpperCase();
     }, "");
+    
     return fetch(stocks_api.replace('#STOCKS#', queryString));
 }
 
@@ -18,7 +19,6 @@ function getSuggestions(ticker) {
 }
 
 class StockService {
-    //clear local storage
     constructor() {
         databaseService.removeAll();
     }
