@@ -6,33 +6,29 @@ import {
     Button
 } from 'react-native';
 
-function pretifyNumber(num) {
+function prettifyNumber(num) {
     let dec_index = num.indexOf('.');
-    let isPercent = num[num.length - 1] === '%' ? true : false;
-
     if (dec_index !== -1) {
-        let value  = num.substring(0, dec_index + 3);
-        return isPercent ? value + '%' : value;
-    } else {
-        return num;
+        return num.substring(0, dec_index + 3);
     }
+    return num; 
 }
 
 const StockItem = (props) => {
     const data = props.data;
-    const value = pretifyNumber(data.LastTradePriceOnly);
-    const percentChange = pretifyNumber(data.PercentChange);
-    const change = pretifyNumber(data.Change)
-    const signStyle = data.PercentChange.substring(0,1) === '-' ? 'red' : 'green';
+    const value = prettifyNumber(data.regularMarketPrice.toString());
+    const percentChange = prettifyNumber(data.regularMarketChangePercent.toString());
+    const change = prettifyNumber(data.regularMarketChange.toString());
+    const signStyle = percentChange.substring(0,1) === '-' ? 'red' : 'green';
     
     return (
         <View style={styles.container} >
-            <Text style={styles.symbol}>{data.symbol.toUpperCase()} </Text>
+            <Text style={styles.symbol}>{data.symbol.toUpperCase()}</Text>
 
             <View style={styles.priceContainer}>
                 <Text style={styles.price}>{value}</Text>
                 <Text style={[styles.percent, { color: signStyle } ]}>
-                    {percentChange}
+                    {percentChange}%
                 </Text>
                 <Text style={[styles.change, { color: signStyle }]}>
                     {change}

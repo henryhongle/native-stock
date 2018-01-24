@@ -9,74 +9,65 @@ import {
 const mapping = [
     {
         label: 'Company',
-        val: 'Name'
+        val: 'shortName'
     },
     {
         label: 'Symbol',
-        val: 'Symbol'
+        val: 'symbol'
     },
     {
         label: 'Price',
-        val: 'LastTradePriceOnly'
+        val: 'regularMarketPrice'
     },
     {
         label: 'Percent change',
-        val: 'ChangeinPercent'
+        val: 'regularMarketChangePercent'
     },
     {
         label: 'Day change',
-        val: 'Change'
-    },
-    {
-        label: 'Day range',
-        val: 'DaysRange',
-    },
-    {
-        label: 'Year range',
-        val: 'YearRange'
+        val: 'regularMarketChange'
     },
     {
         label: 'Dividend yield',
-        val: 'DividendYield',
+        val: 'trailingAnnualDividendYield',
     },
     {
         label: 'Dividend paydate',
-        val: 'DividendPayDate'
+        val: 'dividendDate'
     },
     {
         label: 'Dividend share',
-        val: 'DividendShare'
+        val: 'trailingAnnualDividendRate'
     },
     {
         label: 'PE ratio',
-        val: 'PERatio'
-    },
-    {
-        label: 'EBITDA',
-        val: 'EBITDA'
-    },
-    {
-        label: 'Earnings per share',
-        val: 'EarningsShare'
+        val: 'forwardPE'
     },
     {
         label: '50 days moving avg',
-        val: 'FiftydayMovingAverage'
+        val: 'fiftyDayAverageChange'
     },
     {
         label: '50 days % change',
-        val: 'PercentChangeFromFiftydayMovingAverage'
+        val: 'fiftyTwoWeekHighChangePercent'
     },
     {
         label: '200 days moving avg',
-        val: 'TwoHundreddayMovingAverage'
+        val: 'twoHundredDayAverageChange'
     },
     {
         label: '200 days % change',
-        val: 'PercentChangeFromTwoHundreddayMovingAverage'
+        val: 'twoHundredDayAverageChangePercent'
     }
 ];
 
+function prettifyNumber(num) {
+    let dec_index = num.indexOf('.');
+    if (dec_index !== -1) {
+        return num.substring(0, dec_index + 3);
+    }
+    return num; 
+}
 
 const _renderItem = (data) => {
     const { item } = data;
@@ -95,9 +86,9 @@ const _renderItem = (data) => {
         case '200 days % change':
         case 'EBITDA':
         case 'Earnings per share':
-            const isPositive = data.item.val.substring(0,1) === '-' ? false : true;
+            val = prettifyNumber(data.item.val.toString());
+            const isPositive = val.substring(0,1) === '-' ? false : true;
             customStyles['color'] = isPositive ? 'green' : 'red';
-            val = item.val;
             break;
         default:
             val = item.val;

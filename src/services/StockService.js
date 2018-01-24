@@ -1,71 +1,53 @@
-'use strict';
 import DatabaseService from './DatabaseService';
 const databaseService = new DatabaseService();
 
 let tickers = [];
-let q_getStocks = 'Select * from yahoo.finance.quotes where symbol in (STOCKS);';
 const EXCHANGE_CODES = [ 'ASE', 'NYQ', 'NAS', 'NGM', 'NMS', 'NYS'];
+const stocks_api = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=#STOCKS#`;
+const suggestions_api = `http://d.yimg.com/aq/autoc?query=#STOCK#&region=US&lang=en-US`;
 
-//http://d.yimg.com/aq/autoc?query=f&region=IN&lang=en-US&callback=YAHOO.Finance.SymbolSuggest.ssCallback
-const api = 'https://query.yahooapis.com/v1/public/yql'
-
-let suggestions_api = `http://d.yimg.com/aq/autoc?query=#STOCK#&region=US&lang=en-US`
-
-
-let query_default = {
-    q: '',
-    format: 'json',
-    diagnostics: 'false',
-    env: 'store://datatables.org/alltableswithkeys',
-    callback: ''
-};
-
-function getTickers(stocks) {    
-    let q_str = stocks.map((stock) => {
-        return '"' + stock + '"';
-    })
-    .join();
-    
-    let q = q_getStocks.replace('STOCKS', q_str);
-    let query = {
-        ...query_default,
-        q: q
-    };
-    query = objectToQueryString(query);
-    return fetch(api + query);
+function getTickers(stocks) {
+    let queryString = stocks.reduce((query,stock) => {
+        return query + "," + stock.toUpperCase();
+    }, "");
+    return fetch(stocks_api.replace('#STOCKS#', queryString));
 }
-
-function objectToQueryString(obj) {
-    var query = Object.keys(obj)
-        .filter(key => obj[key] !== '' && obj[key] !== null)
-        .map(key => key + '=' + obj[key])
-        .join('&');
-    return query.length > 0 ? '?' + query : null;
-}
-
 
 function getSuggestions(ticker) {
-    let q = suggestions_api.replace('#STOCK#', ticker.toUpperCase());
-    return fetch(q);
+    return fetch(suggestions_api.replace('#STOCK#', ticker.toUpperCase()));
 }
 
 class StockService {
+    //clear local storage
     constructor() {
-        //databaseService.removeAll();
+        databaseService.removeAll();
+    }
+
+    getStocksData(tickers) {
+        return getTickers(tickers)
+        .then(response => {
+            return response.json();
+        })
+        .then((json) => {
+            return json.quoteResponse.result || [];
+        })
+        .catch(error => {
+            return error;
+        });
     }
 
     getTickers() {
         return databaseService.get()
-        .then((data) => {
-            tickers = data;
+        .then((tickers) => {
             return getTickers(tickers)
             .then(response => {
                 return response.json();
             })
             .then((json) => {
-                return json.query.results.quote || [];
+                return json.quoteResponse.result || [];
             })
             .catch(error => {
+                return error;
             });
         });
     }
@@ -91,7 +73,7 @@ class StockService {
         return getTickers([ticker])
         .then(response => response.json())
         .then(json => json.query.results.quote)
-        .catch(error => 'Something wrong' + error);
+        .catch(error => error);
     }
 
     getSuggestions(ticker) {

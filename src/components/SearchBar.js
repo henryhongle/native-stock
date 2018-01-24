@@ -48,7 +48,8 @@ export default class SearchBar extends React.Component {
         this.setState({
             searchInput: input,
             timeout,
-            suggestions: []
+            suggestions: [],
+            isValidTicker: false
         });
         this.props.onSearchCompleted([]);
     }

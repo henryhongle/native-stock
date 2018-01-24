@@ -1,46 +1,31 @@
 import React from 'react';
-import { 
-  Platform,
-  StatusBar 
-} from 'react-native';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import Thunk from 'redux-thunk';
 
-import { StackNavigator, TabNavigator } from 'react-navigation';
-import HomePage from './containers/HomePage';
-import MyStocks from './containers/MyStocks';
-import StockDetail from './components/StockDetail';
+import AppReducer from './src/reducers';
+import AppWithNavigationState from './src/AppNavigator';
 
-const StockStack = StackNavigator(
-    {
-        Home: {
-            screen: HomePage,
-            navigationOptions: {
-                header: null
-            }
-        },
-        Detail: {
-            screen: StockDetail
-        }
-    }
-);
+const logger = store => next => action => {
+    console.log('dispatching', action);
+    return next(action);
+}
 
-const Tabs = TabNavigator(
-    {
-        HomePage: {
-            screen: StockStack,
-            path: '/',
-            navigationOptions: {
-                tabBarLabel: 'Home'
-            }
-        }
-    },
-    {
-        animationEnabled: false,
-        tabBarPosition: 'top',
-        swipeEnabled: false,
-        tabBarOptions: {
+const middlewares = [
+    Thunk.withExtraArgument()
+]
 
-        }
-    }
-);
+const store = createStore(
+    AppReducer,
+    applyMiddleware(...middlewares)
+)
 
-export default StockStack;
+const App = () => {
+    return (
+        <Provider store={store} >
+            <AppWithNavigationState />
+        </Provider>
+    );
+}
+
+export default App;

@@ -1,4 +1,6 @@
 import React from 'React';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import {
     StyleSheet,
     Text,

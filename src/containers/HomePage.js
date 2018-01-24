@@ -8,39 +8,31 @@ import {
     ActivityIndicator,
     Button,
     TouchableHighlight,
-    Alert
+    Alert,
+    Dimensions
 } from 'react-native';
 
 import { stockService } from '../services/StockService';
 import StockDetail from '../components/StockDetail';
 import StockItem from '../components/StockItem';
 import SearchBar from '../components/SearchBar';
-import API from '../API';
+import FlashMessage from '../components/FlashMessage';
+import { connect } from 'react-redux';
+import { getStocks } from '../actions/stockActions';
 
-export default class HomePage extends React.Component {
+const height = Dimensions.get('window').height;
+
+class HomePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            stocks: [],
-            isLoading: false,
             suggestions: [],
             searchSelected: null
         };
     }
 
     componentWillMount() {
-        this.setState({ isLoading: true });
-        this._fetchStocks();
-    }
-
-    _fetchStocks = () => {
-        stockService.getTickers()
-        .then(stocks => {
-            this.setState({
-                stocks: stocks,
-                isLoading: false
-            });
-        });
+        this.props.fetchStocks();
     }
 
     _deleteStock(index) {
@@ -87,7 +79,6 @@ export default class HomePage extends React.Component {
     }
 
     _onSearchSelected = (item) => {
-        console.log('item', item);
         this.setState({
             searchSelected: item,
             suggestions: []
@@ -95,7 +86,7 @@ export default class HomePage extends React.Component {
     }
 
     _onPress = (index) => {
-        this.props.navigation.navigate('Detail', { stock: this.state.stocks[index] });
+        this.props.navigation.navigate('Detail', { stock: this.props.stocks[index] });
     }
 
     _onLongPress = (index) => {
@@ -122,9 +113,10 @@ export default class HomePage extends React.Component {
     } 
 
     render() {
-        const spinner = this.state.isLoading ? <ActivityIndicator size='large' /> : null;
+        const spinner = this.props.isFetching ? <ActivityIndicator size='large' /> : null;
         return (
             <View style={styles.container}>
+                <FlashMessage />
                 <SearchBar
                     onSearchCompleted={this._updateSuggestion}
                     onItemSelected={this.state.searchSelected}
@@ -134,11 +126,11 @@ export default class HomePage extends React.Component {
                 {spinner}
                 { this.state.suggestions.length == 0 
                     && <View>
-                        <FlatList
-                            data={this.state.stocks}
+                        <FlatList style={styles.stocksContainer}
+                            data={this.props.stocks}
                             keyExtractor={this._keyExtractor}
                             renderItem={this._renderItem}
-                            onRefresh={this._fetchStocks}
+                            onRefresh={this.props.fetchStocks}
                             refreshing={false}
                         />
                     </View>
@@ -165,16 +157,6 @@ const styles = StyleSheet.create({
         padding: 5
     },
 
-    inputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignSelf: 'stretch',
-    },
-
-    itemContainer: {
-        padding: 5,
-    },
-
     separator: {
         height: 1,
         backgroundColor: '#dddddd'
@@ -187,5 +169,26 @@ const styles = StyleSheet.create({
     stock: {
         fontSize: 14,
         paddingLeft: 10
+    },
+
+    stocksContainer: {
+        height: height
     }
 });
+
+const mapStatetoProps = (state) => {
+    return {
+        stocks: state.stocks.stocks,
+        isFetching: state.stocks.isFetching
+    };
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchStocks: () => {
+            dispatch(getStocks());
+        }
+    };
+}
+
+export default connect(mapStatetoProps, mapDispatchToProps)(HomePage);

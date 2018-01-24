@@ -23,9 +23,7 @@ export default class DatabaseService {
                 return DEFAULT;
             }
         })
-        .catch((error) => {
-            console.log('Cannot retrieve local');
-        });
+        .catch((error) => { error; });
     }
 
     removeAll() {
