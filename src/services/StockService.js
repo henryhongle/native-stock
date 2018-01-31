@@ -7,15 +7,15 @@ const stocks_api = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=#S
 const suggestions_api = `http://d.yimg.com/aq/autoc?query=#STOCK#&region=US&lang=en-US`;
 
 function getTickers(stocks) {
+    if (!Array.isArray(stocks)) {
+        stocks = [stocks];
+    }
+
     let queryString = stocks.reduce((query,stock) => {
         return query + "," + stock.toUpperCase();
     }, "");
-    
-    return fetch(stocks_api.replace('#STOCKS#', queryString));
-}
 
-function getSuggestions(ticker) {
-    return fetch(suggestions_api.replace('#STOCK#', ticker.toUpperCase()));
+    return fetch(stocks_api.replace('#STOCKS#', queryString));
 }
 
 class StockService {
@@ -34,46 +34,6 @@ class StockService {
         .catch(error => {
             return error;
         });
-    }
-
-    getTickers() {
-        return databaseService.get()
-        .then((tickers) => {
-            return getTickers(tickers)
-            .then(response => {
-                return response.json();
-            })
-            .then((json) => {
-                return json.quoteResponse.result || [];
-            })
-            .catch(error => {
-                return error;
-            });
-        });
-    }
-
-    addTicker(ticker) {
-        if (tickers.indexOf(ticker) === -1) {
-            tickers.push(ticker);
-            return databaseService.update(tickers)
-            .then(() => {
-                return this.getTickers();
-            });
-        } else {
-            return this.getTickers();
-        }
-    }
-
-    removeTicker(index) {
-        tickers.splice(index, 1);
-        databaseService.update(tickers);
-    }
-
-    getDetail(ticker) {
-        return getTickers([ticker])
-        .then(response => response.json())
-        .then(json => json.query.results.quote)
-        .catch(error => error);
     }
 
     getSuggestions(ticker) {

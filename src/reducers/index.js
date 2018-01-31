@@ -18,8 +18,6 @@ const errorsReducer = (state = initialState, action) => {
     return state;
 }
 
-console.log(stockReducer);
-
 export default AppReducer = combineReducers({
     nav: navReducer,
     stocks: stockReducer,

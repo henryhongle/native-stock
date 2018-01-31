@@ -63,10 +63,8 @@ class HomePage extends React.Component {
         });
     }
 
-    _addStock = ({symbol}) => {
-        this.props.addStock(symbol);
-        //quick way to update stocks data
-        setTimeout(this.props.fetchStocks.bind(this, false), 0);
+    _addStock = (ticker) => {
+        this.props.addStock(ticker);
     }
 
     _renderItem = ({item, index}) => {

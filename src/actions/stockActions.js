@@ -30,12 +30,36 @@ export const getStocks = (enableLoading) => (dispatch, getState) => {
 };
 
 export const addStock = (stock) => (dispatch, getState) => {
+    const state = getState();
+    const { tickers }  = state.stocks;
+
+    //already in the list
+    if (tickers.indexOf(stock) !== -1) {
+        return;
+    }
+
     dispatch({
         type: STOCK.ADD_STOCK,
         payload: {
             stock
         }
     });
+
+    stockService.getStocksData(stock)
+    .then(stockData => {
+        dispatch({
+            type: STOCK.ADD_STOCK_SUCCESS,
+            payload: {
+                stockData
+            }
+        })
+    })
+    .catch( error => {
+        dispatch({
+            type: STOCK.ADD_STOCK_FAIL,
+            error
+        });
+    })
 }
 
 export const deleteStock = (index) => (dispatch, getState) => {

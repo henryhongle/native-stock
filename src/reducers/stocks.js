@@ -32,7 +32,7 @@ const getStocks = (state, action) => {
                 isFetching: false
             };
 
-        case STOCK.GET_STOCKS_ERROR:
+        case STOCK.GET_STOCKS_FAIL:
             return {
                 ...state,
                 isFetching: false
@@ -50,6 +50,16 @@ const addStock = (state, action) => {
                 ...state,
                 tickers: newTickers
             };
+
+        case STOCK.ADD_STOCK_SUCCESS:
+            const newStocks = payload.stockData.concat(state.stocks);
+            return {
+                ...state,
+                stocks: newStocks
+            };
+
+        case STOCK.ADD_STOCK_FAIL:
+            //HANDLE FLASH MESSAGE
     }
 }
 

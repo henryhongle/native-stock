@@ -67,13 +67,10 @@ export default class SearchBar extends React.Component {
     }
 
     _onAddPressed = () => {
-        stockService.addTicker(this.state.searchInput)
-        .then(result => {
-            this.props.onItemAdded(result);
-            this.props.onSearchCompleted([]);
-            this.setState({
-                searchInput: ''
-            });
+        this.props.onItemAdded(this.state.searchInput);
+        this.props.onSearchCompleted([]);
+        this.setState({
+            searchInput: ''
         });
     }
 
