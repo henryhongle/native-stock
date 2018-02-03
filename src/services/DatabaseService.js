@@ -6,27 +6,31 @@ const DEFAULT = [
     'AAPL',
     'FB',
     'SNAP',
-    'TWLO'
+    'TWLO',
+    'YELP'
 ];
 
-export default class DatabaseService {
+class DatabaseService {
     update(stocks) {
         return AsyncStorage.setItem(STOCKS, JSON.stringify(stocks));
     }
 
-    get() {
-        return AsyncStorage.getItem(STOCKS)
-        .then((tickers) => {
-            if (tickers != null) {
-                return JSON.parse(tickers);
-            } else {
+    async get() {
+        try {
+            const tickers = await AsyncStorage.getItem(STOCKS);
+            console.log('Go to hereeee', tickers);
+            if (tickers === null) {
                 return DEFAULT;
             }
-        })
-        .catch((error) => { error; });
+            return JSON.parse(tickers);
+        } catch (error) {
+            return DEFAULT;
+        }
     }
 
     removeAll() {
         return AsyncStorage.removeItem(STOCKS);
     }
 }
+
+export let databaseService = new DatabaseService();

@@ -1,16 +1,9 @@
 import { STOCK } from '../actions/stockActions';
 import createReducer from '../helpers/createReducer';
 
-const DEFAULT = [
-    'AAPL',
-    'FB',
-    'SNAP',
-    'TWLO'
-];
-
 const INITIAL_STATE = {
     stocks: [],
-    tickers: DEFAULT,
+    tickers: [],
     isFetching: false,
 }
 

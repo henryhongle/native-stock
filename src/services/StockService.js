@@ -1,7 +1,3 @@
-import DatabaseService from './DatabaseService';
-const databaseService = new DatabaseService();
-
-let tickers = [];
 const EXCHANGE_CODES = [ 'ASE', 'NYQ', 'NAS', 'NGM', 'NMS', 'NYS'];
 const stocks_api = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=#STOCKS#`;
 const suggestions_api = `http://d.yimg.com/aq/autoc?query=#STOCK#&region=US&lang=en-US`;
@@ -19,10 +15,6 @@ function getTickers(stocks) {
 }
 
 class StockService {
-    constructor() {
-        databaseService.removeAll();
-    }
-
     getStocksData(tickers) {
         return getTickers(tickers)
         .then(response => {
