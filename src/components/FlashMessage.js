@@ -6,17 +6,22 @@ import {
     Dimensions
 } from 'react-native';
 import { connect } from 'react-redux';
+import { dismissError } from '../actions/errorActions';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 class FlashMessage extends React.Component {
+    componentWillReceiveProps(nextProp) {
+        this.props.dismissError();
+    }
+
     render() {
         return (
             <View style={styles.container} >
                 <View style={styles.flashContainer}>
-                    { this.props.errors.errors &&
-                    <Text style={styles.message}>{this.props.errors.errors}</Text> }
+                    { this.props.errors.message &&
+                    <Text style={styles.message}>{this.props.errors.message}</Text> }
                 </View>
             </View>
         );
@@ -34,14 +39,14 @@ const styles = StyleSheet.create({
     },
 
     flashContainer: {
-        height: 36,
+        height: 40,
         backgroundColor: 'red',
     },
 
     message: {
         textAlign: 'center',
         color: 'white',
-        fontSize: 14,
+        fontSize: 16,
         padding: 10,
         width: width
     }
@@ -50,7 +55,15 @@ const styles = StyleSheet.create({
 const mapStatetoProps = (state) => {
     return {
         errors: state.errors
-    }
-}
+    };
+};
 
-export default connect(mapStatetoProps)(FlashMessage);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dismissError: () => {
+            dispatch(dismissError());
+        }
+    };
+};
+
+export default connect(mapStatetoProps, mapDispatchToProps)(FlashMessage);

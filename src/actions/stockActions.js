@@ -7,7 +7,7 @@ export const STOCK = createTypes([
     async('DELETE_STOCK')
 ], 'STOCK');
 
-export const getStocks = (enableLoading) => (dispatch, getState) => {
+export const getStocks = (enableLoading = false) => (dispatch, getState) => {
     if (enableLoading) dispatch({ type: STOCK.GET_STOCKS });
     const state = getState();
     const { tickers }  = state.stocks;
@@ -24,7 +24,7 @@ export const getStocks = (enableLoading) => (dispatch, getState) => {
     .catch(error => {
         dispatch({
             type: STOCK.GET_STOCKS_FAIL,
-            error
+            error: error.message
         });
     });
 };

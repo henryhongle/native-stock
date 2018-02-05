@@ -70,7 +70,8 @@ export default class SearchBar extends React.Component {
         this.props.onItemAdded(this.state.searchInput);
         this.props.onSearchCompleted([]);
         this.setState({
-            searchInput: ''
+            searchInput: '',
+            isValidTicker: false
         });
     }
 

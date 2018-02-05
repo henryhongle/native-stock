@@ -24,7 +24,9 @@ class StockService {
             return json.quoteResponse.result || [];
         })
         .catch(error => {
-            return error;
+            if (error instanceof TypeError) {
+                throw new Error(error.message);
+            }
         });
     }
 
@@ -47,7 +49,13 @@ class StockService {
                 throw new Error('Invalid ticker');
             }
         })
-        .catch( error => error);
+        .catch( error => {
+            if (error instanceof TypeError) {
+                throw new Error(error.message);
+            } else {
+                throw new Error('Oops..Something failed');
+            }
+        });
     }
 }
 

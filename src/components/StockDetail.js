@@ -76,7 +76,7 @@ const _renderItem = (data) => {
 
     switch(item.label) {
         case 'Dividend yield':
-            val = item.val + '%';
+            val = item.val !== undefined ? prettifyNumber(item.val.toString()) + '%' : '';
             break;
         case 'Percent change':
         case 'Day change':
@@ -85,14 +85,21 @@ const _renderItem = (data) => {
         case '200 days moving avg':
         case '200 days % change':
         case 'EBITDA':
+        case 'PE ratio':
         case 'Earnings per share':
             val = prettifyNumber(data.item.val.toString());
             const isPositive = val.substring(0,1) === '-' ? false : true;
             customStyles['color'] = isPositive ? 'green' : 'red';
             break;
+        case 'Dividend paydate':
+            if (item.val) {
+                val = new Date(item.val * 1000).toLocaleDateString();
+            }
+            break;
         default:
             val = item.val;
     }
+
     return (
         <View>
             <View style={styles.itemContainer}>
@@ -114,7 +121,7 @@ class StockDetail extends React.PureComponent {
     render() {
         const { stock } = this.props.navigation.state.params;
         const details = mapping.filter((item) => {
-          if (stock[item['val']] !== null) {
+          if (stock[item['val']] !== null && stock[item['val']] !== undefined) {
               return item;
           }  
         })

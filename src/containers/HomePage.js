@@ -101,7 +101,7 @@ class HomePage extends React.Component {
     }
 
     render() {
-        const spinner = this.props.isFetching ? <ActivityIndicator size='large' /> : null;
+        const spinner = this.props.isFetching ? <ActivityIndicator size='medium' /> : null;
         return (
             <View style={styles.container}>
                 <FlashMessage />
@@ -120,6 +120,7 @@ class HomePage extends React.Component {
                             renderItem={this._renderItem}
                             onRefresh={this.props.fetchStocks}
                             refreshing={false}
+                            keyboardShouldPersistTaps='always'
                         />
                     </View>
                 }
@@ -130,6 +131,7 @@ class HomePage extends React.Component {
                             data={this.state.suggestions}
                             keyExtractor={this._keyExtractor}
                             renderItem={this._renderSuggestionItem}
+                            keyboardShouldPersistTaps='always'
                         />
                     </View>
                 }
@@ -169,12 +171,12 @@ const mapStatetoProps = (state) => {
         stocks: state.stocks.stocks,
         isFetching: state.stocks.isFetching
     };
-}
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchStocks: (enableLoading) => {
-            dispatch(getStocks(enableLoading));
+        fetchStocks: () => {
+            dispatch(getStocks());
         },
 
         addStock: (stock) => {
@@ -185,6 +187,6 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(deleteStock(index));
         }
     };
-}
+};
 
 export default connect(mapStatetoProps, mapDispatchToProps)(HomePage);
