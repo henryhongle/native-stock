@@ -26,13 +26,19 @@ const StockItem = (props) => {
             <Text style={styles.symbol}>{data.symbol.toUpperCase()}</Text>
 
             <View style={styles.priceContainer}>
-                <Text style={styles.price}>{value}</Text>
-                <Text style={[styles.percent, { color: signStyle } ]}>
-                    {percentChange}%
-                </Text>
-                <Text style={[styles.change, { color: signStyle }]}>
-                    {change}
-                </Text>
+                <View style={styles.defaultContainer}>
+                    <Text style={styles.price}>{value}</Text>
+                </View>
+                <View style={styles.defaultContainer}>
+                    <Text style={[styles.percent, { color: signStyle, textAlign: 'right' }]}>
+                        {percentChange}%
+                    </Text>
+                </View>
+                <View style={styles.defaultContainer}>
+                    <Text style={[styles.change, { color: signStyle, textAlign: 'right' }]}>
+                        {change}
+                    </Text>
+                </View>
             </View>
         </View>
     );
@@ -53,30 +59,18 @@ const styles = StyleSheet.create({
     },
 
     priceContainer: {
-        flex: 1,
-        flexGrow: 1,
+        flexGrow: 2,
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        alignItems: 'center'
+    },
+
+    defaultContainer: {
+        minWidth: 45,
+        marginLeft: 30
     },
 
     price: {
         color: 'grey',
-        flexGrow: 1,
-        textAlign: 'right'
-    },
-
-    percent: {
-        marginLeft: 20,
-        flexGrow: 1,
-        minWidth: 50,
-        textAlign: 'right'
-    },
-
-    change: {
-        marginLeft: 15,
-        flexGrow: 1,
-        minWidth: 40,
         textAlign: 'right'
     }
 });
