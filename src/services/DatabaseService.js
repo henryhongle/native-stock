@@ -18,12 +18,12 @@ class DatabaseService {
     async get() {
         try {
             const tickers = await AsyncStorage.getItem(STOCKS);
-            console.log('Go to hereeee', tickers);
             if (tickers === null) {
                 return DEFAULT;
             }
             return JSON.parse(tickers);
         } catch (error) {
+            this.removeAll();
             return DEFAULT;
         }
     }
