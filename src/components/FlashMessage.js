@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { dismissError } from '../actions/errorActions';
+import { scale } from '../helpers/Reponsive';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -39,15 +40,15 @@ const styles = StyleSheet.create({
     },
 
     flashContainer: {
-        height: 40,
+        height: scale(40),
         backgroundColor: 'red',
     },
 
     message: {
         textAlign: 'center',
         color: 'white',
-        fontSize: 16,
-        padding: 10,
+        fontSize: scale(16),
+        padding: scale(10),
         width: width
     }
 });

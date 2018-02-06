@@ -6,6 +6,8 @@ import {
     FlatList,
 } from 'react-native';
 
+import { scale } from '../helpers/Reponsive';
+
 const mapping = [
     {
         label: 'Company',
@@ -147,24 +149,28 @@ class StockDetail extends React.PureComponent {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginRight: 10,
-        marginLeft: 10
+        marginRight: scale(10),
+        marginLeft: scale(0)
     },
     itemContainer: {
-        padding: 5,
+        padding: scale(5),
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        minHeight: scale(36),
     },
     separator: {
         height: 1,
         backgroundColor: '#dddddd'
     },
     label: {
-        flexGrow: 1
+        paddingLeft: 10,
+        flexGrow: 1,
+        fontSize: scale(14),
     },
     info: {
         flexGrow: 1,
+        fontSize: scale(14),
         justifyContent: 'flex-end',
         textAlign: 'right',
     }

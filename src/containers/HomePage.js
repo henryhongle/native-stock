@@ -141,9 +141,7 @@ class HomePage extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        marginTop: scale(24),
-        padding: 5
+        padding: scale(10)
     },
 
     separator: {

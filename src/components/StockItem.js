@@ -32,12 +32,12 @@ const StockItem = (props) => {
                     <Text style={styles.price}>{value}</Text>
                 </View>
                 <View style={styles.defaultContainer}>
-                    <Text style={[styles.percent, { color: signStyle, textAlign: 'right' }]}>
+                    <Text style={[styles.percent, { color: signStyle }]}>
                         {percentChange}%
                     </Text>
                 </View>
                 <View style={styles.defaultContainer}>
-                    <Text style={[styles.change, { color: signStyle, textAlign: 'right' }]}>
+                    <Text style={[styles.change, { color: signStyle }]}>
                         {change}
                     </Text>
                 </View>
@@ -73,7 +73,18 @@ const styles = StyleSheet.create({
 
     price: {
         color: 'grey',
-        textAlign: 'right'
+        textAlign: 'right',
+        fontSize: scale(14)
+    },
+
+    percent: {
+        textAlign: 'right',
+        fontSize: scale(14)
+    },
+
+    change : {
+        textAlign: 'right',
+        fontSize: scale(14)
     }
 });
 

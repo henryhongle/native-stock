@@ -9,6 +9,8 @@ import {
     Dimensions
 } from 'react-native';
 import { stockService } from '../services/StockService';
+import { scale } from '../helpers/Reponsive';
+
 const SEARCH_DEBOUNCE = 500;
 
 export default class SearchBar extends React.Component {
@@ -96,12 +98,14 @@ export default class SearchBar extends React.Component {
                     value={this.state.searchInput}
                     autoCapitalize="characters"
                 />
-                <Button style={styles.addButton}
-                    color='#48BBEC'
-                    title='Add'
-                    onPress={this._onAddPressed}
-                    disabled={!this.state.isValidTicker}
-                />
+                <View style={styles.addButton}w>
+                    <Button 
+                        color='#48BBEC'
+                        title='ADD'
+                        onPress={this._onAddPressed}
+                        disabled={!this.state.isValidTicker}
+                    />
+                </View>
             </View>
         );
     };
@@ -109,15 +113,16 @@ export default class SearchBar extends React.Component {
 
 const styles = StyleSheet.create({
     inputContainer: {
-        flexDirection: 'row'
+        flex: 1,
+        flexDirection: 'row',
+        paddingBottom: scale(40)
     },
 
     searchInput: {
-        padding: 5,
-        margin: 5,
-        height: 32,
-        flexGrow: 1,
-        fontSize: 16,
+        padding: scale(5),
+        height: scale(32),
+        flexGrow: 4,
+        fontSize: scale(16),
         borderWidth: 1,
         borderColor: '#48BBEC',
         borderRadius: 8,

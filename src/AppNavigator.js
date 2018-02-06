@@ -17,7 +17,7 @@ export const StockStack = StackNavigator(
         Home: {
             screen: HomePage,
             navigationOptions: {
-                header: null
+
             }
         },
         Detail: {
