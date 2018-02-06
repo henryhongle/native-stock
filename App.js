@@ -19,7 +19,7 @@ const logger = store => next => action => {
 
 const middlewares = [
     Thunk.withExtraArgument(),
-    logger
+    //logger
 ]
 
 let store = createStore(

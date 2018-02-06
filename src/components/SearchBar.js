@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     },
 
     addButton: {
-        flexGrow: 1
+        flexGrow: 1,
+        minWidth: scale(50)
     }
 });

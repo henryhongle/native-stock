@@ -13,6 +13,7 @@ import {
     Keyboard
 } from 'react-native';
 
+import Swipeout from 'react-native-swipeout';
 import { stockService } from '../services/StockService';
 import StockDetail from '../components/StockDetail';
 import StockItem from '../components/StockItem';
@@ -46,15 +47,6 @@ class HomePage extends React.Component {
         this.props.navigation.navigate('Detail', { stock: this.props.stocks[index] });
     }
 
-    _onLongPress = (index) => {
-        const stock = this.props.stocks[index].symbol;
-        Alert.alert('', `Remove ${stock}?`,
-        [
-            {text: 'Cancel'},
-            {text: 'Delete', onPress: this.props.deleteStock.bind(this, index)}
-        ]);
-    }
-
     _keyExtractor = (item, index) => index;
 
     _updateSuggestion = (suggestions) => {
@@ -69,18 +61,28 @@ class HomePage extends React.Component {
     }
 
     _renderItem = ({item, index}) => {
+        const swipeSettings = {
+            autoClose: true,
+            right: [
+                { onPress:  this.props.deleteStock.bind(this, index), text: 'Delete', type: 'delete' }
+            ],
+            backgroundColor: 'transparent'
+        };
+
         return (
-            <TouchableHighlight
-                onPress={this._onPress.bind(null, index)}
-                onLongPress={this._onLongPress.bind(null, index)}
-                underlayColor='#dddddd' >
-                <View>
-                    <StockItem 
-                        data={item}
-                    />
-                    <View style={styles.separator} />
-                </View>
-            </TouchableHighlight>
+            <Swipeout {...swipeSettings}
+                backgroundColor= 'transparent'>
+                <TouchableHighlight
+                    onPress={this._onPress.bind(null, index)}
+                    underlayColor='#dddddd' >
+                    <View>
+                        <StockItem
+                            data={item}
+                        />
+                        <View style={styles.separator} />
+                    </View>
+                </TouchableHighlight>
+            </Swipeout>
         );
     }
 
@@ -102,7 +104,6 @@ class HomePage extends React.Component {
     }
 
     render() {
-        //const spinner = this.props.isFetching ? <ActivityIndicator size='medium' /> : null;
         return (
             <View style={styles.container}>
                 <FlashMessage />

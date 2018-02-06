@@ -1,8 +1,4 @@
 import React from 'react';
-import { 
-    Platform,
-    StatusBar 
-} from 'react-native';
 
 import { StackNavigator, TabNavigator, addNavigationHelpers } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -17,7 +13,7 @@ export const StockStack = StackNavigator(
         Home: {
             screen: HomePage,
             navigationOptions: {
-
+                title: 'Watchlist'
             }
         },
         Detail: {
