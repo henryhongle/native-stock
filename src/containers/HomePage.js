@@ -9,7 +9,8 @@ import {
     Button,
     TouchableHighlight,
     Alert,
-    Dimensions
+    Dimensions,
+    Keyboard
 } from 'react-native';
 
 import { stockService } from '../services/StockService';
@@ -19,8 +20,7 @@ import SearchBar from '../components/SearchBar';
 import FlashMessage from '../components/FlashMessage';
 import { connect } from 'react-redux';
 import { getStocks, addStock, deleteStock } from '../actions/stockActions';
-
-const height = Dimensions.get('window').height;
+import { scale } from '../helpers/Reponsive';
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -65,6 +65,7 @@ class HomePage extends React.Component {
 
     _addStock = (ticker) => {
         this.props.addStock(ticker);
+        Keyboard.dismiss();
     }
 
     _renderItem = ({item, index}) => {
@@ -101,7 +102,7 @@ class HomePage extends React.Component {
     }
 
     render() {
-        const spinner = this.props.isFetching ? <ActivityIndicator size='medium' /> : null;
+        //const spinner = this.props.isFetching ? <ActivityIndicator size='medium' /> : null;
         return (
             <View style={styles.container}>
                 <FlashMessage />
@@ -111,7 +112,6 @@ class HomePage extends React.Component {
                     onItemAdded={this._addStock}
                 />
 
-                {spinner}
                 { this.state.suggestions.length == 0 
                     && <View>
                         <FlatList style={styles.stocksContainer}
@@ -119,8 +119,7 @@ class HomePage extends React.Component {
                             keyExtractor={this._keyExtractor}
                             renderItem={this._renderItem}
                             onRefresh={this.props.fetchStocks}
-                            refreshing={false}
-                            keyboardShouldPersistTaps='always'
+                            refreshing={this.props.isFetching}
                         />
                     </View>
                 }
@@ -143,7 +142,7 @@ class HomePage extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 24,
+        marginTop: scale(24),
         padding: 5
     },
 
@@ -153,16 +152,12 @@ const styles = StyleSheet.create({
     },
 
     suggestionContainer: {
-        padding: 5
+        padding: scale(5)
     },
 
     stock: {
-        fontSize: 14,
-        paddingLeft: 10
-    },
-
-    stocksContainer: {
-        height: height
+        fontSize: scale(14),
+        paddingLeft: scale(10)
     }
 });
 

@@ -88,7 +88,7 @@ export default class SearchBar extends React.Component {
         return (
             <View style ={styles.inputContainer}>
                 <TextInput style={styles.searchInput}
-                    placeholder='APPL'
+                    placeholder='Search...'
                     type="text"
                     autoCorrect={false}
                     underlineColorAndroid='transparent'
@@ -96,7 +96,7 @@ export default class SearchBar extends React.Component {
                     value={this.state.searchInput}
                     autoCapitalize="characters"
                 />
-                <Button
+                <Button style={styles.addButton}
                     color='#48BBEC'
                     title='Add'
                     onPress={this._onAddPressed}
@@ -109,9 +109,7 @@ export default class SearchBar extends React.Component {
 
 const styles = StyleSheet.create({
     inputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignSelf: 'stretch',
+        flexDirection: 'row'
     },
 
     searchInput: {
@@ -124,5 +122,9 @@ const styles = StyleSheet.create({
         borderColor: '#48BBEC',
         borderRadius: 8,
         color: '#48BBEC',
+    },
+
+    addButton: {
+        flexGrow: 1
     }
 });

@@ -6,6 +6,8 @@ import {
     Button
 } from 'react-native';
 
+import { scale } from '../helpers/Reponsive';
+
 function prettifyNumber(num) {
     let dec_index = num.indexOf('.');
     if (dec_index !== -1) {
@@ -46,15 +48,15 @@ const StockItem = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
+        padding: scale(10),
         flex: 1,
-        height: 36,
+        height: scale(36),
         flexDirection: 'row',
     },
 
     symbol: {
         flexGrow: 1,
-        fontSize: 14,
+        fontSize: scale(14),
         alignSelf: 'center'
     },
 
@@ -65,8 +67,8 @@ const styles = StyleSheet.create({
     },
 
     defaultContainer: {
-        minWidth: 45,
-        marginLeft: 30
+        minWidth: scale(45),
+        marginLeft: scale(30)
     },
 
     price: {
