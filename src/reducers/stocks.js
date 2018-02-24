@@ -2,8 +2,8 @@ import { STOCK } from '../actions/stockActions';
 import createReducer from '../helpers/createReducer';
 
 const INITIAL_STATE = {
-    stocks: [],
-    tickers: [],
+    stocks: {},
+    tickers: {},
     isFetching: false,
 }
 
@@ -38,17 +38,26 @@ const addStock = (state, action) => {
 
     switch (type) {
         case STOCK.ADD_STOCK:
-            const newTickers = [payload.stock].concat(state.tickers);
+            const ticker = {
+                [payload.stock]: payload.stock
+            };
+
             return {
                 ...state,
-                tickers: newTickers
+                tickers: {
+                    ...ticker,
+                    ...state.tickers
+                },
             };
 
         case STOCK.ADD_STOCK_SUCCESS:
-            const newStocks = payload.stockData.concat(state.stocks);
+            const newStock = payload.stockData;
             return {
                 ...state,
-                stocks: newStocks
+                stocks: {
+                    ...newStock,
+                    ...state.stocks
+                }
             };
 
         case STOCK.ADD_STOCK_FAIL:
@@ -61,14 +70,18 @@ const deleteStock = (state, action) => {
     
     switch (type) {
         case STOCK.DELETE_STOCK:
-            const newTickers = state.tickers.filter((ticker, index) => index !== payload.index);
+            const newTickers = Object.assign({}, state.tickers);
+            delete newTickers[payload.stock];
+
             return {
                 ...state,
                 tickers: newTickers
             };
 
         case STOCK.DELETE_STOCK_CLEANUP:
-            const newStocks = state.stocks.filter((stock, index) => index !== payload.index);
+            const newStocks = Object.assign({}, state.stocks);
+            delete newStocks[payload.stock];
+
             return {
                 ...state,
                 stocks: newStocks

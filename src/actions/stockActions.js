@@ -33,8 +33,7 @@ export const addStock = (stock) => (dispatch, getState) => {
     const state = getState();
     const { tickers }  = state.stocks;
 
-    //already in the list
-    if (tickers.indexOf(stock) !== -1) {
+    if (tickers[stock] !== undefined) {
         return;
     }
 
@@ -62,18 +61,18 @@ export const addStock = (stock) => (dispatch, getState) => {
     })
 }
 
-export const deleteStock = (index) => (dispatch, getState) => {
+export const deleteStock = (stock) => (dispatch, getState) => {
     dispatch({
         type: STOCK.DELETE_STOCK,
         payload: {
-            index
+            stock
         }
     });
 
     dispatch({
         type: STOCK.DELETE_STOCK_CLEANUP,
         payload: {
-            index
+            stock
         }
     });
 }

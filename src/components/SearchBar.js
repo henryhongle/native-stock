@@ -98,7 +98,7 @@ export default class SearchBar extends React.Component {
                     value={this.state.searchInput}
                     autoCapitalize="characters"
                 />
-                <View style={styles.addButton}w>
+                <View style={styles.addButton}>
                     <Button 
                         color='#48BBEC'
                         title='ADD'
@@ -113,24 +113,25 @@ export default class SearchBar extends React.Component {
 
 const styles = StyleSheet.create({
     inputContainer: {
-        flex: 1,
         flexDirection: 'row',
-        paddingBottom: scale(40)
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
     searchInput: {
         padding: scale(5),
         height: scale(32),
-        flexGrow: 4,
+        flex: 4,
         fontSize: scale(16),
         borderWidth: 1,
         borderColor: '#48BBEC',
-        borderRadius: 8,
+        borderRadius: scale(8),
         color: '#48BBEC',
     },
 
     addButton: {
-        flexGrow: 1,
-        minWidth: scale(50)
+        paddingLeft: scale(5),
+        height: scale(32),
+        flex: 1
     }
 });

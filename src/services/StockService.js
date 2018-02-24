@@ -4,14 +4,29 @@ const suggestions_api = `http://d.yimg.com/aq/autoc?query=#STOCK#&region=US&lang
 
 function getTickers(stocks) {
     if (!Array.isArray(stocks)) {
-        stocks = [stocks];
+        if (typeof stocks === 'string') {
+            stocks = {
+                [stocks]: stocks
+            }
+        }
+        stocks = Object.values(stocks);
+    }
+    const queryString = stocks.join(',');
+    return fetch(stocks_api.replace('#STOCKS#', queryString));
+}
+
+//helper to specificly conver stock data array to object
+function arrayToObject(array) {
+    if (!Array.isArray(array)) {
+        return {};
     }
 
-    let queryString = stocks.reduce((query,stock) => {
-        return query + "," + stock.toUpperCase();
-    }, "");
+    const data = array.reduce((obj, item) => {
+        obj[item.symbol] = item;
+        return obj;
+    }, {});
 
-    return fetch(stocks_api.replace('#STOCKS#', queryString));
+    return data;
 }
 
 class StockService {
@@ -21,7 +36,8 @@ class StockService {
             return response.json();
         })
         .then((json) => {
-            return json.quoteResponse.result || [];
+            const data = arrayToObject(json.quoteResponse.result);
+            return data;
         })
         .catch(error => {
             if (error instanceof TypeError) {

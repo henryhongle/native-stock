@@ -2,13 +2,13 @@
 import { AsyncStorage } from 'react-native';
 
 const STOCKS = 'STOCKS';
-const DEFAULT = [
-    'AAPL',
-    'FB',
-    'SNAP',
-    'TWLO',
-    'YELP'
-];
+const DEFAULT = {
+    'AAPL': 'AAPL',
+    'FB': 'FB',
+    'SNAP': 'SNAP',
+    'TWLO': 'TWLO',
+    'YELP': 'YELP'
+}
 
 class DatabaseService {
     update(stocks) {

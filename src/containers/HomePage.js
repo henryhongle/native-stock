@@ -43,8 +43,8 @@ class HomePage extends React.Component {
         });
     }
 
-    _onPress = (index) => {
-        this.props.navigation.navigate('Detail', { stock: this.props.stocks[index] });
+    _onPress = (stock) => {
+        this.props.navigation.navigate('Detail', { stock });
     }
 
     _keyExtractor = (item, index) => index;
@@ -64,7 +64,7 @@ class HomePage extends React.Component {
         const swipeSettings = {
             autoClose: true,
             right: [
-                { onPress:  this.props.deleteStock.bind(this, index), text: 'Delete', type: 'delete' }
+                { onPress:  this.props.deleteStock.bind(this, item.symbol), text: 'Delete', type: 'delete' }
             ],
             backgroundColor: 'transparent'
         };
@@ -73,7 +73,7 @@ class HomePage extends React.Component {
             <Swipeout {...swipeSettings}
                 backgroundColor= 'transparent'>
                 <TouchableHighlight
-                    onPress={this._onPress.bind(null, index)}
+                    onPress={this._onPress.bind(null, item)}
                     underlayColor='#dddddd' >
                     <View>
                         <StockItem
@@ -107,33 +107,33 @@ class HomePage extends React.Component {
         return (
             <View style={styles.container}>
                 <FlashMessage />
-                <SearchBar
-                    onSearchCompleted={this._updateSuggestion}
-                    onItemSelected={this.state.searchSelected}
-                    onItemAdded={this._addStock}
-                />
+                <View style={styles.searchContainer}>
+                    <SearchBar
+                        onSearchCompleted={this._updateSuggestion}
+                        onItemSelected={this.state.searchSelected}
+                        onItemAdded={this._addStock}
+                    />
+                </View>
 
                 { this.state.suggestions.length == 0 
-                    && <View>
-                        <FlatList style={styles.stocksContainer}
-                            data={this.props.stocks}
-                            keyExtractor={this._keyExtractor}
-                            renderItem={this._renderItem}
-                            onRefresh={this.props.fetchStocks}
-                            refreshing={this.props.isFetching}
-                        />
-                    </View>
+                    &&
+                    <FlatList style={styles.stocksContainer}
+                        data={Object.values(this.props.stocks)}
+                        keyExtractor={this._keyExtractor}
+                        renderItem={this._renderItem}
+                        onRefresh={this.props.fetchStocks}
+                        refreshing={this.props.isFetching}
+                    />
                 }
 
                 { this.state.suggestions.length != 0
-                    && <View>
-                        <FlatList
-                            data={this.state.suggestions}
-                            keyExtractor={this._keyExtractor}
-                            renderItem={this._renderSuggestionItem}
-                            keyboardShouldPersistTaps='always'
-                        />
-                    </View>
+                    &&
+                    <FlatList style={styles.suggestionContainer}
+                        data={this.state.suggestions}
+                        keyExtractor={this._keyExtractor}
+                        renderItem={this._renderSuggestionItem}
+                        keyboardShouldPersistTaps='always'
+                    />
                 }
             </View>
         );
@@ -142,6 +142,7 @@ class HomePage extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         padding: scale(10)
     },
 
@@ -157,6 +158,9 @@ const styles = StyleSheet.create({
     stock: {
         fontSize: scale(14),
         paddingLeft: scale(10)
+    },
+    searchContainer: {
+        marginBottom: scale(10)
     }
 });
 
@@ -177,8 +181,8 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(addStock(stock));
         },
 
-        deleteStock: (index) => {
-            dispatch(deleteStock(index));
+        deleteStock: (stock) => {
+            dispatch(deleteStock(stock));
         }
     };
 };
