@@ -1,4 +1,5 @@
 import React from 'React';
+import * as R from 'ramda';
 import {
     StyleSheet,
     Text,
@@ -32,7 +33,7 @@ class HomePage extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.fetchStocks(true);
     }
 
@@ -165,10 +166,15 @@ const styles = StyleSheet.create({
 });
 
 const mapStatetoProps = (state) => {
-    return {
-        stocks: state.stocks.stocks,
-        isFetching: state.stocks.isFetching
-    };
+  const stocks = [];
+  R.forEach((id) => {
+    stocks.push(state.stocks.stocks.byId[id]);
+  }, state.stocks.stocks.allIds);
+
+  return {
+    stocks: stocks,
+    isFetching: state.stocks.isFetching
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

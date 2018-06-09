@@ -47,7 +47,7 @@ class App extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         AppState.addEventListener('change', this._handleAppStateChange.bind(this));
 
         databaseService.get()

@@ -13,7 +13,7 @@ export function createTypes(types, namespace, separator = '.') {
     return typeObj;
 }
 
-export function async(type, fail = 'FAIL', success = 'SUCCESS', clean = 'CLEANUP') {
+export function asyncVariants(type, fail = 'FAILURE', success = 'SUCCESS', clean = 'CLEANUP') {
     return [
         type,
         `${type}_${fail}`,
