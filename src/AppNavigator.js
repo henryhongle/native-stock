@@ -9,30 +9,30 @@ import MyStocks from './containers/MyStocks';
 import StockDetail from './components/StockDetail';
 
 export const StockStack = StackNavigator(
-    {
-        Home: {
-            screen: HomePage,
-            navigationOptions: {
-                title: 'Watchlist'
-            }
-        },
-        Detail: {
-            screen: StockDetail
-        }
+  {
+    Home: {
+      screen: HomePage,
+      navigationOptions: {
+        title: 'Watchlist'
+      }
+    },
+    Detail: {
+      screen: StockDetail
     }
+  }
 );
 
 const AppWithNavigationState = ({dispatch, nav}) => (
-    <StockStack navigation={addNavigationHelpers({ dispatch, state: nav })} />
+  <StockStack navigation={addNavigationHelpers({ dispatch, state: nav })} />
 );
 
 AppWithNavigationState.propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    nav: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  nav: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
-    nav: state.nav,
+  nav: state.nav,
 });
 
 export default connect(mapStateToProps)(AppWithNavigationState);

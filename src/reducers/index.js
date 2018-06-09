@@ -4,31 +4,31 @@ import { combineReducers } from 'redux';
 import { ERRORS } from '../actions/errorActions';
 
 const initialState = {
-    errors: {
-        message: null
-    }
+  errors: {
+    message: null
+  }
 };
 
 const errorsReducer = (state = initialState, action) => {
-    const { error, type } = action;
-    if (error) {
-        return {
-            message: error
-        }
+  const { error, type } = action;
+  if (error) {
+    return {
+      message: error
     }
+  }
 
-    switch (type) {
-        case ERRORS.DISMISS_ERROR:
-            return {
-                message: null
-            }
-    }
+  switch (type) {
+    case ERRORS.DISMISS_ERROR:
+      return {
+        message: null
+      }
+  }
 
-    return state;
+  return state;
 }
 
 export default AppReducer = combineReducers({
-    nav: navReducer,
-    stocks: stockReducer,
-    errors: errorsReducer
+  nav: navReducer,
+  stocks: stockReducer,
+  errors: errorsReducer
 });
