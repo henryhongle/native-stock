@@ -1,12 +1,13 @@
-import React from 'React';
+import React from 'react';
 import {
   StyleSheet,
   View,
   Text,
-  FlatList,
+  FlatList
 } from 'react-native';
 
 import { scale } from '../helpers/Reponsive';
+import prettifyNumber from '../helpers/numberUtil';
 
 const mapping = [
   {
@@ -63,17 +64,9 @@ const mapping = [
   }
 ];
 
-function prettifyNumber(num) {
-  let dec_index = num.indexOf('.');
-  if (dec_index !== -1) {
-    return num.substring(0, dec_index + 3);
-  }
-  return num; 
-}
-
-const _renderItem = (data) => {
+const renderItem = (data) => {
   const { item } = data;
-  let customStyles = {};
+  const customStyles = {};
   let val;
 
   switch(item.label) {
@@ -139,7 +132,7 @@ class StockDetail extends React.PureComponent {
         <FlatList
           data={details}
           keyExtractor={_keyExtractor}
-          renderItem={_renderItem}
+          renderItem={renderItem}
         />
       </View>
     );

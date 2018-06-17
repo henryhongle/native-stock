@@ -1,26 +1,21 @@
-import React from 'React';
+import React from 'react';
+import { connect } from 'react-redux';
 import * as R from 'ramda';
 import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   FlatList,
-  ActivityIndicator,
-  Button,
   TouchableHighlight,
-  Alert,
-  Dimensions,
   Keyboard
 } from 'react-native';
 
 import Swipeout from 'react-native-swipeout';
-import { stockService } from '../services/StockService';
-import StockDetail from '../components/StockDetail';
-import StockItem from '../components/StockItem';
-import SearchBar from '../components/SearchBar';
-import FlashMessage from '../components/FlashMessage';
-import { connect } from 'react-redux';
+import {
+  StockItem,
+  SearchBar,
+  FlashMessage
+} from '../components';
 import { getStocks, addStock, deleteStock } from '../actions/stockActions';
 import { scale } from '../helpers/Reponsive';
 
@@ -65,7 +60,7 @@ class HomePage extends React.Component {
     const swipeSettings = {
       autoClose: true,
       right: [
-        { onPress:  this.props.deleteStock.bind(this, item.symbol), text: 'Delete', type: 'delete' }
+        { onPress: this.props.deleteStock.bind(this, item.symbol), text: 'Delete', type: 'delete' }
       ],
       backgroundColor: 'transparent'
     };
@@ -168,12 +163,12 @@ const styles = StyleSheet.create({
 const mapStatetoProps = (state) => {
   const stocks = [];
   R.forEach((id) => {
-  stocks.push(state.stocks.stocks.byId[id]);
+    stocks.push(state.stocks.stocks.byId[id]);
   }, state.stocks.stocks.allIds);
 
   return {
-  stocks: stocks,
-  isFetching: state.stocks.isFetching
+    stocks,
+    isFetching: state.stocks.isFetching
   };
 };
 

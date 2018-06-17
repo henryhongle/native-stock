@@ -1,19 +1,20 @@
-import React from 'React';
+import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Text,
   View,
   Dimensions
 } from 'react-native';
-import { connect } from 'react-redux';
+
 import { dismissError } from '../actions/errorActions';
 import { scale } from '../helpers/Reponsive';
 
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+const { width } = Dimensions.get('window');
 
 class FlashMessage extends React.Component {
-  componentWillReceiveProps(nextProp) {
+  componentWillReceiveProps() {
     this.props.dismissError();
   }
 
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
 
   flashContainer: {
     height: scale(40),
-    backgroundColor: 'red',
+    backgroundColor: 'red'
   },
 
   message: {
@@ -49,22 +50,23 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: scale(16),
     padding: scale(10),
-    width: width
+    width
   }
 });
 
-const mapStatetoProps = (state) => {
-  return {
-    errors: state.errors
-  };
+FlashMessage.propTypes = {
+  dismissError: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dismissError: () => {
-      dispatch(dismissError());
-    }
-  };
-};
+const mapStatetoProps = state => ({
+  errors: state.errors
+});
+
+const mapDispatchToProps = dispatch => ({
+  dismissError: () => {
+    dispatch(dismissError());
+  }
+});
 
 export default connect(mapStatetoProps, mapDispatchToProps)(FlashMessage);

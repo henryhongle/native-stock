@@ -1,19 +1,16 @@
-import React from 'React';
+import React from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   TextInput,
-  Button,
-  FlatList,
-  Dimensions
+  Button
 } from 'react-native';
 import { stockService } from '../services/StockService';
 import { scale } from '../helpers/Reponsive';
 
 const SEARCH_DEBOUNCE = 500;
 
-export default class SearchBar extends React.Component {
+class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -135,3 +132,5 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
+
+export default SearchBar;

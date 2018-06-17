@@ -1,10 +1,8 @@
-import React from 'React';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import React from 'react';
 import {
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
 
 export default class MyStocks extends React.Component {

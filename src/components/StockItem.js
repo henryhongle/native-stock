@@ -1,28 +1,21 @@
-import React from 'React';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   View,
-  Text,
-  Button
+  Text
 } from 'react-native';
 
 import { scale } from '../helpers/Reponsive';
-
-function prettifyNumber(num) {
-  let dec_index = num.indexOf('.');
-  if (dec_index !== -1) {
-    return num.substring(0, dec_index + 3);
-  }
-  return num; 
-}
+import prettifyNumber from '../helpers/numberUtil';
 
 const StockItem = (props) => {
-  const data = props.data;
+  const { data } = props;
   const value = prettifyNumber(data.regularMarketPrice.toString());
   const percentChange = prettifyNumber(data.regularMarketChangePercent.toString());
   const change = prettifyNumber(data.regularMarketChange.toString());
-  const signStyle = percentChange.substring(0,1) === '-' ? 'red' : 'green';
-  
+  const signStyle = percentChange.substring(0, 1) === '-' ? 'red' : 'green';
+
   return (
     <View style={styles.container} >
       <Text style={styles.symbol}>{data.symbol.toUpperCase()}</Text>
@@ -51,7 +44,7 @@ const styles = StyleSheet.create({
     padding: scale(10),
     flex: 1,
     height: scale(36),
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
 
   symbol: {
@@ -63,7 +56,7 @@ const styles = StyleSheet.create({
   priceContainer: {
     flexGrow: 2,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
 
   defaultContainer: {
@@ -82,10 +75,14 @@ const styles = StyleSheet.create({
     fontSize: scale(14)
   },
 
-  change : {
+  change: {
     textAlign: 'right',
     fontSize: scale(14)
   }
 });
+
+StockItem.propTypes = {
+  data: PropTypes.object.isRequired
+};
 
 export default StockItem;

@@ -1,6 +1,7 @@
+import { combineReducers } from 'redux';
 import navReducer from './nav';
 import stockReducer from './stocks';
-import { combineReducers } from 'redux';
+
 import { ERRORS } from '../actions/errorActions';
 
 const initialState = {
@@ -14,21 +15,24 @@ const errorsReducer = (state = initialState, action) => {
   if (error) {
     return {
       message: error
-    }
+    };
   }
 
   switch (type) {
     case ERRORS.DISMISS_ERROR:
       return {
         message: null
-      }
+      };
+
+    default:
+      return state;
   }
+};
 
-  return state;
-}
-
-export default AppReducer = combineReducers({
+const AppReducer = combineReducers({
   nav: navReducer,
   stocks: stockReducer,
   errors: errorsReducer
 });
+
+export default AppReducer;

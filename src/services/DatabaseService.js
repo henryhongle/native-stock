@@ -1,14 +1,13 @@
-'use strict';
 import { AsyncStorage } from 'react-native';
 
 const STOCKS = 'STOCKS';
 const DEFAULT = {
-  'AAPL': 'AAPL',
-  'FB': 'FB',
-  'SNAP': 'SNAP',
-  'TWLO': 'TWLO',
-  'YELP': 'YELP'
-}
+  AAPL: 'AAPL',
+  FB: 'FB',
+  SNAP: 'SNAP',
+  TWLO: 'TWLO',
+  YELP: 'YELP'
+};
 
 class DatabaseService {
   update(stocks) {
@@ -33,4 +32,6 @@ class DatabaseService {
   }
 }
 
-export let databaseService = new DatabaseService();
+const databaseService = new DatabaseService();
+
+export default databaseService;
