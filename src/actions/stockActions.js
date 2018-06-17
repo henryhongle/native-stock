@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { stockService } from '../services/StockService';
+import stockService from '../services/StockService';
 import { createTypes, asyncVariants } from '../helpers/actionTypes';
 
 export const STOCK = createTypes([

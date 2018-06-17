@@ -5,7 +5,7 @@ import {
   TextInput,
   Button
 } from 'react-native';
-import { stockService } from '../services/StockService';
+import stockService from '../services/StockService';
 import { scale } from '../helpers/Reponsive';
 
 const SEARCH_DEBOUNCE = 500;

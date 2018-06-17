@@ -8,8 +8,8 @@ const INITIAL_STATE = {
     allIds: []
   },
   tickers: {},
-  isFetching: false,
-}
+  isFetching: false
+};
 
 const getStocks = (state, action) => {
   const { payload, type } = action;
@@ -22,10 +22,9 @@ const getStocks = (state, action) => {
       };
 
     case STOCK.GET_STOCKS_SUCCESS:
-      const { stocks } = payload;
       return {
         ...state,
-        stocks: stocks,
+        stocks: payload.stocks,
         isFetching: false
       };
 
@@ -34,8 +33,11 @@ const getStocks = (state, action) => {
         ...state,
         isFetching: false
       };
+
+    default:
+      return state;
   }
-}
+};
 
 const addStock = (state, action) => {
   const { payload, type } = action;
@@ -51,7 +53,7 @@ const addStock = (state, action) => {
         tickers: {
           ...ticker,
           ...state.tickers
-        },
+        }
       };
 
     case STOCK.ADD_STOCK_SUCCESS:
@@ -68,13 +70,14 @@ const addStock = (state, action) => {
       };
 
     case STOCK.ADD_STOCK_FAILURE:
-      //HANDLE FLASH MESSAGE
+    default:
+      return state;
   }
-}
+};
 
 const deleteStock = (state, action) => {
   const { payload, type } = action;
-  
+
   switch (type) {
     case STOCK.DELETE_STOCK:
       const newTickers = Object.assign({}, state.tickers);
@@ -88,10 +91,7 @@ const deleteStock = (state, action) => {
     case STOCK.DELETE_STOCK_CLEANUP:
       const newStocks = Object.assign({}, state.stocks.byId);
       delete newStocks[payload.stock];
-
-      const newAllIds = R.filter((id) => {
-        return id !== payload.stock;
-      }, state.stocks.allIds)
+      const newAllIds = R.filter(id => id !== payload.stock, state.stocks.allIds);
 
       return {
         ...state,
@@ -100,10 +100,13 @@ const deleteStock = (state, action) => {
           allIds: newAllIds
         }
       };
-  }
-}
 
-let stockReducer = createReducer(INITIAL_STATE, [
+    default:
+      return state;
+  }
+};
+
+const stockReducer = createReducer(INITIAL_STATE, [
   getStocks,
   addStock,
   deleteStock
