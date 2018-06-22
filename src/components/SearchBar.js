@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   View,
@@ -16,14 +17,13 @@ class SearchBar extends React.Component {
     this.state = {
       searchInput: '',
       timeout: null,
-      suggestions: [],
       isValidTicker: false
     };
   }
 
   componentWillReceiveProps(nextProps) {
     const { onItemSelected } = nextProps;
-    if (onItemSelected && onItemSelected != this.props.onItemSelected) {
+    if (onItemSelected && onItemSelected !== this.props.onItemSelected) {
       this.setState({
         searchInput: onItemSelected.symbol,
         isValidTicker: true
@@ -31,8 +31,7 @@ class SearchBar extends React.Component {
     }
   }
 
-  _onChangeText = (input) => {
-    //TODO sanitize string only
+  onChangeText = (input) => {
     let timeout = null;
     if (this.state.timeout) {
       clearTimeout(this.state.timeout);
@@ -40,32 +39,30 @@ class SearchBar extends React.Component {
 
     if (input !== '') {
       timeout = setTimeout(() => {
-        this._getSuggestions(input);
+        this.getSuggestions(input);
       }, SEARCH_DEBOUNCE);
     }
 
     this.setState({
       searchInput: input,
       timeout,
-      suggestions: [],
       isValidTicker: false
     });
     this.props.onSearchCompleted([]);
   }
 
-  _getSuggestions = (ticker) => {
+  getSuggestions = (ticker) => {
     stockService.getSuggestions(ticker)
-    .then( (suggestions) => {
-      this.props.onSearchCompleted(suggestions);
-      const isValidTicker = this._isValidTicker(suggestions, this.state.searchInput);
-      this.setState({
-        suggestions,
-        isValidTicker: isValidTicker
+      .then((suggestions) => {
+        this.props.onSearchCompleted(suggestions);
+        const isValidTicker = this.isValidTicker(suggestions, this.state.searchInput);
+        this.setState({
+          isValidTicker
+        });
       });
-    })
   }
 
-  _onAddPressed = () => {
+  addTicker = () => {
     this.props.onItemAdded(this.state.searchInput);
     this.props.onSearchCompleted([]);
     this.setState({
@@ -74,9 +71,11 @@ class SearchBar extends React.Component {
     });
   }
 
-  _isValidTicker(suggestions, ticker) {
-    for (i = 0; i < suggestions.length; i++) {
-      if (suggestions[i].symbol === ticker) {
+  isValidTicker(suggestions) {
+    const { searchInput } = this.state;
+
+    for (let i = 0; i < suggestions.length; i += 1) {
+      if (suggestions[i].symbol === searchInput) {
         return true;
       }
     }
@@ -85,28 +84,39 @@ class SearchBar extends React.Component {
 
   render() {
     return (
-      <View style ={styles.inputContainer}>
-        <TextInput style={styles.searchInput}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.searchInput}
           placeholder='Search...'
-          type="text"
+          type='text'
           autoCorrect={false}
           underlineColorAndroid='transparent'
-          onChangeText={this._onChangeText}
+          onChangeText={this.onChangeText}
           value={this.state.searchInput}
-          autoCapitalize="characters"
+          autoCapitalize='characters'
         />
         <View style={styles.addButton}>
-          <Button 
+          <Button
             color='#48BBEC'
             title='ADD'
-            onPress={this._onAddPressed}
+            onPress={this.addTicker}
             disabled={!this.state.isValidTicker}
           />
         </View>
       </View>
     );
-  };
+  }
 }
+
+SearchBar.propTypes = {
+  onItemSelected: PropTypes.object,
+  onItemAdded: PropTypes.func.isRequired,
+  onSearchCompleted: PropTypes.func.isRequired
+};
+
+SearchBar.defaultProps = {
+  onItemSelected: null
+};
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -123,7 +133,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#48BBEC',
     borderRadius: scale(8),
-    color: '#48BBEC',
+    color: '#48BBEC'
   },
 
   addButton: {

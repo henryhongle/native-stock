@@ -5,14 +5,12 @@ import {
   View
 } from 'react-native';
 
-export default class MyStocks extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>My stocksss</Text>
-      </View>
-    );
-  };
+const MyStocks = () => {
+  return (
+    <View style={styles.container}>
+      <Text>My stocksss</Text>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -20,6 +18,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   }
 });
+
+export default MyStocks;

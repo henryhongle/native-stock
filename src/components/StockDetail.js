@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   View,
@@ -32,7 +33,7 @@ const mapping = [
   },
   {
     label: 'Dividend yield',
-    val: 'trailingAnnualDividendYield',
+    val: 'trailingAnnualDividendYield'
   },
   {
     label: 'Dividend paydate',
@@ -67,11 +68,11 @@ const mapping = [
 const renderItem = (data) => {
   const { item } = data;
   const customStyles = {};
-  let val;
+  let { val } = item;
 
-  switch(item.label) {
+  switch (item.label) {
     case 'Dividend yield':
-      val = item.val !== undefined ? prettifyNumber(item.val.toString()) + '%' : '';
+      val = item.val !== undefined ? `${prettifyNumber(item.val.toString())} %` : '';
       break;
     case 'Percent change':
     case 'Day change':
@@ -83,8 +84,7 @@ const renderItem = (data) => {
     case 'PE ratio':
     case 'Earnings per share':
       val = prettifyNumber(data.item.val.toString());
-      const isPositive = val.substring(0,1) === '-' ? false : true;
-      customStyles['color'] = isPositive ? 'green' : 'red';
+      customStyles.color = val.substring(0, 1) === '-' ? 'red' : 'green';
       break;
     case 'Dividend paydate':
       if (item.val) {
@@ -92,21 +92,20 @@ const renderItem = (data) => {
       }
       break;
     default:
-      val = item.val;
   }
 
   return (
     <View>
       <View style={styles.itemContainer}>
         <Text style={styles.label}>{item.label}</Text>
-        <Text style={[styles.info, { ...customStyles}]}>{val}</Text>
+        <Text style={[styles.info, { ...customStyles }]}>{val}</Text>
       </View>
       <View style={styles.separator} />
     </View>
   );
-}
+};
 
-const _keyExtractor = (item, index) => index;
+const keyExtractor = (item, index) => index;
 
 class StockDetail extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
@@ -115,29 +114,30 @@ class StockDetail extends React.PureComponent {
 
   render() {
     const { stock } = this.props.navigation.state.params;
-    const details = mapping.filter((item) => {
-      if (stock[item['val']] !== null && stock[item['val']] !== undefined) {
-        return item;
-      }  
-    })
-    .map(item => {
-      let newItem = {};
-      newItem['label'] = item['label'];
-      newItem['val'] = stock[item['val']];
-      return newItem;
-    });
+    const details = mapping.filter(item => (
+      stock[item.val] !== null && stock[item.val] !== undefined))
+      .map((item) => {
+        const newItem = {};
+        newItem.label = item.label;
+        newItem.val = stock[item.val];
+        return newItem;
+      });
 
     return (
       <View style={styles.container}>
         <FlatList
           data={details}
-          keyExtractor={_keyExtractor}
+          keyExtractor={keyExtractor}
           renderItem={renderItem}
         />
       </View>
     );
-  };
+  }
 }
+
+StockDetail.propTypes = {
+  navigation: PropTypes.object.isRequired
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: scale(36),
+    minHeight: scale(36)
   },
   separator: {
     height: 1,
@@ -159,13 +159,13 @@ const styles = StyleSheet.create({
   label: {
     paddingLeft: 10,
     flexGrow: 1,
-    fontSize: scale(14),
+    fontSize: scale(14)
   },
   info: {
     flexGrow: 1,
     fontSize: scale(14),
     justifyContent: 'flex-end',
-    textAlign: 'right',
+    textAlign: 'right'
   }
 });
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as R from 'ramda';
+import PropTypes from 'prop-types';
+import Swipeout from 'react-native-swipeout';
 import {
   StyleSheet,
   Text,
@@ -9,8 +11,6 @@ import {
   TouchableHighlight,
   Keyboard
 } from 'react-native';
-
-import Swipeout from 'react-native-swipeout';
 import {
   StockItem,
   SearchBar,
@@ -32,31 +32,31 @@ class HomePage extends React.Component {
     this.props.fetchStocks(true);
   }
 
-  _onSearchSelected = (item) => {
+  selectSearchedTicker = (item) => {
     this.setState({
       searchSelected: item,
       suggestions: []
     });
   }
 
-  _onPress = (stock) => {
+  viewStockDetails = (stock) => {
     this.props.navigation.navigate('Detail', { stock });
   }
 
-  _keyExtractor = (item, index) => index;
+  keyExtractor = (item, index) => index;
 
-  _updateSuggestion = (suggestions) => {
+  updateSuggestion = (suggestions) => {
     this.setState({
       suggestions
     });
   }
 
-  _addStock = (ticker) => {
+  addStock = (ticker) => {
     this.props.addStock(ticker);
     Keyboard.dismiss();
   }
 
-  _renderItem = ({item, index}) => {
+  renderItem = ({ item }) => {
     const swipeSettings = {
       autoClose: true,
       right: [
@@ -66,11 +66,14 @@ class HomePage extends React.Component {
     };
 
     return (
-      <Swipeout {...swipeSettings}
-        backgroundColor= 'transparent'>
+      <Swipeout
+        {...swipeSettings}
+        backgroundColor='transparent'
+      >
         <TouchableHighlight
-          onPress={this._onPress.bind(null, item)}
-          underlayColor='#dddddd' >
+          onPress={this.viewStockDetails.bind(null, item)}
+          underlayColor='#dddddd'
+        >
           <View>
             <StockItem
               data={item}
@@ -82,11 +85,12 @@ class HomePage extends React.Component {
     );
   }
 
-  _renderSuggestionItem = ({item, index}) => {
+  renderSuggestionItem = ({ item }) => {
     return (
       <TouchableHighlight
         underlayColor='#dddddd'
-        onPress={this._onSearchSelected.bind(null, item)} >
+        onPress={this.selectSearchedTicker.bind(null, item)}
+      >
         <View>
           <View style={styles.suggestionContainer}>
             <Text style={styles.stock}>{item.symbol}</Text>
@@ -95,7 +99,6 @@ class HomePage extends React.Component {
           <View style={styles.separator} />
         </View>
       </TouchableHighlight>
-      
     );
   }
 
@@ -105,35 +108,50 @@ class HomePage extends React.Component {
         <FlashMessage />
         <View style={styles.searchContainer}>
           <SearchBar
-            onSearchCompleted={this._updateSuggestion}
+            onSearchCompleted={this.updateSuggestion}
             onItemSelected={this.state.searchSelected}
-            onItemAdded={this._addStock}
+            onItemAdded={this.addStock}
           />
         </View>
 
-        { this.state.suggestions.length == 0 
+        { this.state.suggestions.length === 0
           &&
-          <FlatList style={styles.stocksContainer}
-            data={Object.values(this.props.stocks)}
-            keyExtractor={this._keyExtractor}
-            renderItem={this._renderItem}
+          <FlatList
+            style={styles.stocksContainer}
+            data={this.props.stocks}
+            keyExtractor={this.keyExtractor}
+            renderItem={this.renderItem}
             onRefresh={this.props.fetchStocks}
             refreshing={this.props.isFetching}
           />
         }
 
-        { this.state.suggestions.length != 0
+        { this.state.suggestions.length !== 0
           &&
-          <FlatList style={styles.suggestionContainer}
+          <FlatList
+            style={styles.suggestionContainer}
             data={this.state.suggestions}
-            keyExtractor={this._keyExtractor}
-            renderItem={this._renderSuggestionItem}
+            keyExtractor={this.keyExtractor}
+            renderItem={this.renderSuggestionItem}
             keyboardShouldPersistTaps='always'
           />
         }
       </View>
     );
-  };
+  }
+}
+
+HomePage.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  fetchStocks: PropTypes.func.isRequired,
+  addStock: PropTypes.func.isRequired,
+  deleteStock: PropTypes.func.isRequired,
+  stocks: PropTypes.array.isRequired,
+  isFetching: PropTypes.bool
+};
+
+HomePage.defaultProps = {
+  isFetching: false
 };
 
 const styles = StyleSheet.create({
