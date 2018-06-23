@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  View,
-  Text
-} from 'react-native';
-
-import { scale } from '../helpers/Reponsive';
+import { View, Text } from 'react-native';
+import styles from './StockItem.style';
 import prettifyNumber from '../helpers/numberUtil';
 
 const StockItem = (props) => {
@@ -38,48 +33,6 @@ const StockItem = (props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: scale(10),
-    flex: 1,
-    height: scale(36),
-    flexDirection: 'row'
-  },
-
-  symbol: {
-    flexGrow: 1,
-    fontSize: scale(14),
-    alignSelf: 'center'
-  },
-
-  priceContainer: {
-    flexGrow: 2,
-    flexDirection: 'row',
-    justifyContent: 'flex-end'
-  },
-
-  defaultContainer: {
-    minWidth: scale(45),
-    marginLeft: scale(30)
-  },
-
-  price: {
-    color: 'grey',
-    textAlign: 'right',
-    fontSize: scale(14)
-  },
-
-  percent: {
-    textAlign: 'right',
-    fontSize: scale(14)
-  },
-
-  change: {
-    textAlign: 'right',
-    fontSize: scale(14)
-  }
-});
 
 StockItem.propTypes = {
   data: PropTypes.object.isRequired

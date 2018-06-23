@@ -1,13 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  Button
-} from 'react-native';
+import { View, TextInput, Button } from 'react-native';
 import stockService from '../services/StockService';
-import { scale } from '../helpers/Reponsive';
+import styles from './SearchBar.style';
 
 const SEARCH_DEBOUNCE = 500;
 
@@ -84,7 +79,7 @@ class SearchBar extends React.Component {
 
   render() {
     return (
-      <View style={styles.inputContainer}>
+      <View style={styles.container}>
         <TextInput
           style={styles.searchInput}
           placeholder='Search...'
@@ -117,30 +112,5 @@ SearchBar.propTypes = {
 SearchBar.defaultProps = {
   onItemSelected: null
 };
-
-const styles = StyleSheet.create({
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-
-  searchInput: {
-    padding: scale(5),
-    height: scale(32),
-    flex: 4,
-    fontSize: scale(16),
-    borderWidth: 1,
-    borderColor: '#48BBEC',
-    borderRadius: scale(8),
-    color: '#48BBEC'
-  },
-
-  addButton: {
-    paddingLeft: scale(5),
-    height: scale(32),
-    flex: 1
-  }
-});
 
 export default SearchBar;

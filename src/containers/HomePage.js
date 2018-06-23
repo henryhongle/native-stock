@@ -4,20 +4,20 @@ import * as R from 'ramda';
 import PropTypes from 'prop-types';
 import Swipeout from 'react-native-swipeout';
 import {
-  StyleSheet,
   Text,
   View,
   FlatList,
   TouchableHighlight,
-  Keyboard
+  Keyboard,
+  ActivityIndicator
 } from 'react-native';
+import { getStocks, addStock, deleteStock } from '../actions/stockActions';
+import styles from './HomePage.style';
 import {
   StockItem,
   SearchBar,
   FlashMessage
 } from '../components';
-import { getStocks, addStock, deleteStock } from '../actions/stockActions';
-import { scale } from '../helpers/Reponsive';
 
 class HomePage extends React.Component {
   constructor(props) {
@@ -103,9 +103,17 @@ class HomePage extends React.Component {
   }
 
   render() {
+    const { isFetching } = this.props;
+
     return (
       <View style={styles.container}>
         <FlashMessage />
+        { isFetching &&
+          <View style={styles.loadingIndicator}>
+            <ActivityIndicator size='large' />
+          </View>
+        }
+
         <View style={styles.searchContainer}>
           <SearchBar
             onSearchCompleted={this.updateSuggestion}
@@ -114,8 +122,7 @@ class HomePage extends React.Component {
           />
         </View>
 
-        { this.state.suggestions.length === 0
-          &&
+        { !isFetching && this.state.suggestions.length === 0 &&
           <FlatList
             style={styles.stocksContainer}
             data={this.props.stocks}
@@ -126,8 +133,7 @@ class HomePage extends React.Component {
           />
         }
 
-        { this.state.suggestions.length !== 0
-          &&
+        { !isFetching && this.state.suggestions.length !== 0 &&
           <FlatList
             style={styles.suggestionContainer}
             data={this.state.suggestions}
@@ -154,30 +160,6 @@ HomePage.defaultProps = {
   isFetching: false
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: scale(10)
-  },
-
-  separator: {
-    height: 1,
-    backgroundColor: '#dddddd'
-  },
-
-  suggestionContainer: {
-    padding: scale(5)
-  },
-
-  stock: {
-    fontSize: scale(14),
-    paddingLeft: scale(10)
-  },
-  searchContainer: {
-    marginBottom: scale(10)
-  }
-});
-
 const mapStatetoProps = (state) => {
   const stocks = [];
   R.forEach((id) => {
@@ -192,17 +174,9 @@ const mapStatetoProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchStocks: () => {
-      dispatch(getStocks());
-    },
-
-    addStock: (stock) => {
-      dispatch(addStock(stock));
-    },
-
-    deleteStock: (stock) => {
-      dispatch(deleteStock(stock));
-    }
+    fetchStocks: () => dispatch(getStocks()),
+    addStock: stock => dispatch(addStock(stock)),
+    deleteStock: stock => dispatch(deleteStock(stock))
   };
 };
 

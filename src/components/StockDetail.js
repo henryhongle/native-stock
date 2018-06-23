@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  StyleSheet,
   View,
   Text,
   FlatList
 } from 'react-native';
-
-import { scale } from '../helpers/Reponsive';
+import styles from './StockDetail.style';
 import prettifyNumber from '../helpers/numberUtil';
 
 const mapping = [
@@ -138,35 +136,5 @@ class StockDetail extends React.PureComponent {
 StockDetail.propTypes = {
   navigation: PropTypes.object.isRequired
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginRight: scale(10),
-    marginLeft: scale(0)
-  },
-  itemContainer: {
-    padding: scale(5),
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    minHeight: scale(36)
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#dddddd'
-  },
-  label: {
-    paddingLeft: 10,
-    flexGrow: 1,
-    fontSize: scale(14)
-  },
-  info: {
-    flexGrow: 1,
-    fontSize: scale(14),
-    justifyContent: 'flex-end',
-    textAlign: 'right'
-  }
-});
 
 export default StockDetail;
