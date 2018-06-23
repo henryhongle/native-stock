@@ -10,17 +10,16 @@ const styles = createStyles({
   searchInput: {
     padding: scale(5),
     height: scale(32),
-    flex: 4,
+    flex: 5,
     fontSize: scale(16),
     borderWidth: 1,
-    borderColor: colors.blue,
+    borderColor: 'black',
     borderRadius: scale(8),
-    color: colors.blue
+    color: colors.blue,
+    alignSelf: 'center'
   },
 
-  addButton: {
-    paddingLeft: scale(5),
-    height: scale(32),
+  addButtonContainer: {
     flex: 1
   }
 });

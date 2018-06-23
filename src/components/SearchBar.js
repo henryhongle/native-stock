@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, TextInput, Button } from 'react-native';
+import { View, TextInput } from 'react-native';
+import { Icon } from 'react-native-elements';
 import stockService from '../services/StockService';
 import styles from './SearchBar.style';
+import { scale } from '../helpers/baseStyles';
 
-const SEARCH_DEBOUNCE = 500;
+const SEARCH_DEBOUNCE = 300;
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -90,10 +92,10 @@ class SearchBar extends React.Component {
           value={this.state.searchInput}
           autoCapitalize='characters'
         />
-        <View style={styles.addButton}>
-          <Button
-            color='#48BBEC'
-            title='ADD'
+        <View style={styles.addButtonContainer}>
+          <Icon
+            name='add'
+            size={scale(32)}
             onPress={this.addTicker}
             disabled={!this.state.isValidTicker}
           />

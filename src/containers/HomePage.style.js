@@ -1,11 +1,6 @@
-import { createStyles, scale, colors, padding } from '../helpers/baseStyles';
+import { createStyles, scale, colors } from '../helpers/baseStyles';
 
 const styles = createStyles({
-  container: {
-    flex: 1,
-    padding: padding.sm
-  },
-
   separator: {
     height: 1,
     backgroundColor: colors.gray
