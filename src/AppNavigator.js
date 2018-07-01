@@ -8,10 +8,7 @@ import StockDetail from './components/StockDetail';
 
 export const StockStack = StackNavigator({
   Home: {
-    screen: HomePage,
-    navigationOptions: {
-      title: 'Watchlist'
-    }
+    screen: HomePage
   },
   Detail: {
     screen: StockDetail

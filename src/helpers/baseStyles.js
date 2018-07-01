@@ -36,7 +36,7 @@ export const fonts = {
 const baseStyles = {
   container: {
     paddingHorizontal: padding.sm,
-    paddingVertical: padding.sm,
+    flex: 1,
     width
   },
   header: {

@@ -3,6 +3,7 @@ import { AppState } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import Thunk from 'redux-thunk';
+import logger from 'redux-logger';
 import databaseService from './src/services/DatabaseService';
 import AppReducer from './src/reducers';
 import AppWithNavigationState from './src/AppNavigator';
@@ -10,6 +11,10 @@ import AppWithNavigationState from './src/AppNavigator';
 const middlewares = [
   Thunk.withExtraArgument()
 ];
+
+if (__DEV__) {
+  middlewares.push(logger);
+}
 
 const store = createStore(
   AppReducer,

@@ -1,6 +1,11 @@
-import { createStyles, scale, colors } from '../helpers/baseStyles';
+import { createStyles, scale, colors, padding } from '../helpers/baseStyles';
 
 const styles = createStyles({
+  container: {
+    flex: 1,
+    paddingHorizontal: padding.sm
+  },
+
   separator: {
     height: 1,
     backgroundColor: colors.gray
@@ -9,13 +14,12 @@ const styles = createStyles({
   suggestionContainer: {
     padding: scale(5)
   },
+
   stock: {
     fontSize: scale(14),
     paddingLeft: scale(10)
   },
-  searchContainer: {
-    marginBottom: scale(10)
-  },
+
   loadingIndicator: {
     position: 'absolute',
     left: 0,
