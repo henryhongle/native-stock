@@ -42,6 +42,9 @@ class SearchBar extends React.Component {
         <Search
           ref={(search) => { this.search = search; }}
           lightTheme
+          autoCapitalize='characters'
+          autoCorrect={false}
+          spellCheck={false}
           placeholder='Search...'
           onClear={this.props.clearTickerSearch}
           onChangeText={this.searchTicker}

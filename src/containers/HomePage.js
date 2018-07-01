@@ -15,6 +15,7 @@ import { getStocks, addStock, deleteStock } from '../actions/stockActions';
 import { clearTickerSearch } from '../actions/searchActions';
 import styles from './HomePage.style';
 import SearchBar from './SearchBar';
+import { getStocksSelector } from '../selectors/stocksSelectors';
 import {
   StockItem,
   FlashMessage
@@ -140,13 +141,8 @@ HomePage.defaultProps = {
 };
 
 const mapStatetoProps = (state) => {
-  const stocks = [];
-  R.forEach((id) => {
-    stocks.push(state.stocks.stocks.byId[id]);
-  }, state.stocks.stocks.allIds);
-
   return {
-    stocks,
+    stocks: getStocksSelector(state),
     isStocksFetching: state.stocks.isFetching,
     suggestedTickers: state.search.tickers
   };
