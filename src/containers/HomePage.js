@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as R from 'ramda';
 import PropTypes from 'prop-types';
 import Swipeout from 'react-native-swipeout';
 import {

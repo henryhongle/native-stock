@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { ERRORS } from '../actions/errorActions';
-import navReducer from './nav';
 import stockReducer from './stocks';
 import searchReducer from './search';
 
@@ -30,7 +29,6 @@ const errorsReducer = (state = initialState, action) => {
 };
 
 const AppReducer = combineReducers({
-  nav: navReducer,
   stocks: stockReducer,
   errors: errorsReducer,
   search: searchReducer

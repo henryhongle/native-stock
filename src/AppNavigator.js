@@ -1,12 +1,12 @@
 import React from 'react';
-import { StackNavigator, addNavigationHelpers } from 'react-navigation';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import HomePage from './containers/HomePage';
+import Portfolio from './containers/Portfolio';
 import StockDetail from './components/StockDetail';
+import { scale, colors } from './helpers/baseStyles';
 
-export const StockStack = StackNavigator({
+export const StockStack = createStackNavigator({
   Home: {
     screen: HomePage
   },
@@ -15,17 +15,41 @@ export const StockStack = StackNavigator({
   }
 });
 
-const AppWithNavigationState = ({ dispatch, nav }) => (
-  <StockStack navigation={addNavigationHelpers({ dispatch, state: nav })} />
-);
-
-AppWithNavigationState.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  nav: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  nav: state.nav
+export const PortfolioStack = createStackNavigator({
+  Porfolio: {
+    screen: Portfolio
+  }
 });
 
-export default connect(mapStateToProps)(AppWithNavigationState);
+export default createBottomTabNavigator(
+  {
+    Market: {
+      screen: StockStack
+    },
+    Portfolio: {
+      screen: PortfolioStack
+    }
+  },
+  {
+    navigationOptions: ({ navigation }) => ({
+      /* eslint react/display-name: 0 */
+      /* eslint react/prop-types: 0 */
+      tabBarIcon: ({ focused, tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'Market') {
+          iconName = `ios-trending-up${focused ? '' : '-outline'}`;
+        } else if (routeName === 'Portfolio') {
+          iconName = `ios-folder${focused ? '' : '-outline'}`;
+        }
+
+        return <Ionicons name={iconName} size={scale(30)} color={tintColor} />;
+      }
+    }),
+    tabBarOptions: {
+      activeTintColor: colors.green,
+      showLabel: false
+    },
+    initialRouteName: 'Market'
+  }
+);

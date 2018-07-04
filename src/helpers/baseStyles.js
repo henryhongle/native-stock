@@ -14,8 +14,10 @@ export const colors = {
   secondary: '#254B5A',
   tertiary: '#5DA6A7',
   gray: '#dddddd',
+  lightGray: '#F1F1F1',
   blue: '#48BBEC',
-  red: '#cc0000'
+  red: '#cc0000',
+  green: 'green'
 };
 
 export const padding = {
@@ -35,9 +37,9 @@ export const fonts = {
 
 const baseStyles = {
   container: {
-    paddingHorizontal: padding.sm,
+    backgroundColor: '#fff',
     flex: 1,
-    width
+    paddingHorizontal: padding.sm
   },
   header: {
     backgroundColor: 'transparent',
