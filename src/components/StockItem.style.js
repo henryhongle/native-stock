@@ -1,33 +1,27 @@
-import { createStyles, scale } from '../helpers/baseStyles';
+import { createStyles, scale, padding } from '../helpers/baseStyles';
 
 const styles = createStyles({
   container: {
-    padding: scale(10),
     flex: 1,
+    padding: padding.md,
     height: scale(36),
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  column: {
+    flex: 1
   },
 
   symbol: {
-    flexGrow: 1,
-    fontSize: scale(14),
-    alignSelf: 'center'
-  },
-
-  priceContainer: {
-    flexGrow: 2,
-    flexDirection: 'row',
-    justifyContent: 'flex-end'
-  },
-
-  defaultContainer: {
-    minWidth: scale(45),
-    marginLeft: scale(30)
+    textAlign: 'left',
+    fontSize: scale(14)
   },
 
   price: {
-    color: 'grey',
     textAlign: 'right',
+    color: 'grey',
     fontSize: scale(14)
   },
 

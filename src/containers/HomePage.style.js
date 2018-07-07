@@ -1,9 +1,9 @@
-import { createStyles, scale, colors } from '../helpers/baseStyles';
+import { createStyles, scale } from '../helpers/baseStyles';
 
 const styles = createStyles({
-  separator: {
-    height: 1,
-    backgroundColor: colors.lightGray
+  container: {
+    backgroundColor: '#fff',
+    flex: 1
   },
 
   suggestionContainer: {

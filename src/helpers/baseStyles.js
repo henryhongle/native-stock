@@ -13,7 +13,7 @@ export const colors = {
   primary: '#226B74',
   secondary: '#254B5A',
   tertiary: '#5DA6A7',
-  gray: '#dddddd',
+  gray: 'grey',
   lightGray: '#F1F1F1',
   blue: '#48BBEC',
   red: '#cc0000',
@@ -38,8 +38,7 @@ export const fonts = {
 const baseStyles = {
   container: {
     backgroundColor: '#fff',
-    flex: 1,
-    paddingHorizontal: padding.sm
+    flex: 1
   },
   header: {
     backgroundColor: 'transparent',
@@ -50,6 +49,10 @@ const baseStyles = {
   section: {
     paddingVertical: padding.lg,
     paddingHorizontal: padding.xl
+  },
+  separator: {
+    height: 1,
+    backgroundColor: colors.lightGray
   }
 };
 

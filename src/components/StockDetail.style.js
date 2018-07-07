@@ -1,10 +1,10 @@
-import { createStyles, scale } from '../helpers/baseStyles';
+import { createStyles, scale, colors } from '../helpers/baseStyles';
 
 const styles = createStyles({
   container: {
     flex: 1,
-    marginRight: scale(10),
-    marginLeft: scale(0)
+    backgroundColor: 'white',
+    paddingRight: scale(10)
   },
   itemContainer: {
     padding: scale(5),
@@ -15,7 +15,7 @@ const styles = createStyles({
   },
   separator: {
     height: 1,
-    backgroundColor: '#dddddd'
+    backgroundColor: colors.lightGray
   },
   label: {
     paddingLeft: 10,
