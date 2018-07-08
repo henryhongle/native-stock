@@ -3,6 +3,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import HomePage from './containers/HomePage';
 import Portfolio from './containers/Portfolio';
+import AddPosition from './containers/AddPosition';
 import StockDetail from './components/StockDetail';
 import { scale } from './helpers/baseStyles';
 
@@ -18,6 +19,9 @@ export const StockStack = createStackNavigator({
 export const PortfolioStack = createStackNavigator({
   Porfolio: {
     screen: Portfolio
+  },
+  AddPosition: {
+    screen: AddPosition
   }
 });
 

@@ -10,7 +10,7 @@ import { getStocks } from '../actions/stockActions';
 
 const renderMenuButton = navigation => (
   <View style={{ paddingRight: 10 }}>
-    <Icon name='add' onPress={() => {}} />
+    <Icon name='add' onPress={() => { navigation.navigate('AddPosition'); }} />
   </View>
 );
 

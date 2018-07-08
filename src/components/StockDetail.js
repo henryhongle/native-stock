@@ -107,7 +107,7 @@ const keyExtractor = (item, index) => index;
 
 class StockDetail extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
-    title: navigation.state.params.stock.Symbol
+    title: navigation.state.params.stock.symbol
   });
 
   render() {
