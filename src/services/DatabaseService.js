@@ -1,13 +1,7 @@
 import { AsyncStorage } from 'react-native';
 
 const STOCKS = 'STOCKS';
-const DEFAULT = {
-  AAPL: 'AAPL',
-  FB: 'FB',
-  SNAP: 'SNAP',
-  TWLO: 'TWLO',
-  YELP: 'YELP'
-};
+const DEFAULT = ['AAPL', 'FB', 'MSFT'];
 
 function update(stocks) {
   return AsyncStorage.setItem(STOCKS, JSON.stringify(stocks));

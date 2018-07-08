@@ -6,6 +6,7 @@ import { Icon } from 'react-native-elements';
 import styles from './Portfolio.style';
 import { getPositions } from '../selectors/portfolioSelectors';
 import { PortfolioItem, PortfolioSummary } from '../components';
+import { getStocks } from '../actions/stockActions';
 
 const renderMenuButton = navigation => (
   <View style={{ paddingRight: 10 }}>
@@ -40,7 +41,7 @@ class Portfolio extends React.Component {
     );
   }
 
-  renderTransaction = ({ item }) => {
+  renderPosition = ({ item }) => {
     return (
       <TouchableHighlight
         onPress={() => {}}
@@ -57,7 +58,7 @@ class Portfolio extends React.Component {
   }
 
   render() {
-    const { positions } = this.props;
+    const { positions, fetchStocks, isStocksFetching } = this.props;
 
     return (
       <View style={styles.container}>
@@ -66,7 +67,9 @@ class Portfolio extends React.Component {
         <FlatList
           data={positions}
           keyExtractor={this.keyExtractor}
-          renderItem={this.renderTransaction}
+          renderItem={this.renderPosition}
+          onRefresh={fetchStocks}
+          refreshing={isStocksFetching}
         />
         <PortfolioSummary positions={positions} />
       </View>
@@ -75,17 +78,21 @@ class Portfolio extends React.Component {
 }
 
 Portfolio.propTypes = {
-  positions: PropTypes.array.isRequired
+  positions: PropTypes.array.isRequired,
+  fetchStocks: PropTypes.func.isRequired,
+  isStocksFetching: PropTypes.bool.isRequired
 };
 
 const mapStatetoProps = (state) => {
   return {
-    positions: getPositions(state)
+    positions: getPositions(state),
+    isStocksFetching: state.stocks.isFetching
   };
 };
 
-const mapDispatchToProps = () => {
+const mapDispatchToProps = (dispatch) => {
   return {
+    fetchStocks: () => dispatch(getStocks())
   };
 };
 

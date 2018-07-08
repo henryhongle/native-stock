@@ -29,9 +29,19 @@ export const getStocks = (enableLoading = false) => (dispatch, getState) => {
   const state = getState();
   const { tickers } = state.stocks;
 
-  stockService.getStocksData(tickers)
+  const positionTickers = R.reduce((acc, val) => {
+    acc.push(val.symbol);
+    return acc;
+  }, [], R.values(state.portfolios.positions.byId));
+
+  stockService.getStocksData(R.union(positionTickers, tickers))
     .then((stocks) => {
       const normalizedStocks = normalizeStocksData(stocks);
+
+      if (R.equals(normalizedStocks.byId, state.stocks.stocks.byId)) {
+        return;
+      }
+
       dispatch({
         type: STOCK.GET_STOCKS_SUCCESS,
         payload: {
@@ -55,13 +65,6 @@ export const addStock = stock => (dispatch, getState) => {
     return;
   }
 
-  dispatch({
-    type: STOCK.ADD_STOCK,
-    payload: {
-      stock
-    }
-  });
-
   stockService.getStocksData(stock)
     .then((stockData) => {
       dispatch({
@@ -82,13 +85,6 @@ export const addStock = stock => (dispatch, getState) => {
 export const deleteStock = stock => (dispatch) => {
   dispatch({
     type: STOCK.DELETE_STOCK,
-    payload: {
-      stock
-    }
-  });
-
-  dispatch({
-    type: STOCK.DELETE_STOCK_CLEANUP,
     payload: {
       stock
     }

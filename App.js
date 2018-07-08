@@ -33,7 +33,6 @@ class App extends React.Component {
 
   componentDidMount() {
     AppState.addEventListener('change', this.handleAppStateChange.bind(this));
-
     databaseService.get()
       .then((persistedTickers) => {
         const oldData = this.state.store.getState();

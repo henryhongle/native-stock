@@ -7,7 +7,7 @@ const INITIAL_STATE = {
     byId: {},
     allIds: []
   },
-  tickers: {},
+  tickers: [],
   isFetching: false
 };
 
@@ -43,21 +43,10 @@ const addStock = (state, action) => {
   const { payload, type } = action;
 
   switch (type) {
-    case STOCK.ADD_STOCK:
-      const ticker = {
-        [payload.stock]: payload.stock
-      };
-
-      return {
-        ...state,
-        tickers: {
-          ...ticker,
-          ...state.tickers
-        }
-      };
-
     case STOCK.ADD_STOCK_SUCCESS:
       const { newStock } = payload;
+      const tickers = R.prepend(newStock.symbol, state.tickers);
+
       return {
         ...state,
         stocks: {
@@ -66,7 +55,8 @@ const addStock = (state, action) => {
             [newStock.symbol]: newStock
           },
           allIds: [newStock.symbol].concat(state.stocks.allIds)
-        }
+        },
+        tickers
       };
 
     case STOCK.ADD_STOCK_FAILURE:
@@ -80,25 +70,11 @@ const deleteStock = (state, action) => {
 
   switch (type) {
     case STOCK.DELETE_STOCK:
-      const newTickers = Object.assign({}, state.tickers);
-      delete newTickers[payload.stock];
+      const tickers = R.reject(R.equals(payload.stock), state.tickers);
 
       return {
         ...state,
-        tickers: newTickers
-      };
-
-    case STOCK.DELETE_STOCK_CLEANUP:
-      const newStocks = Object.assign({}, state.stocks.byId);
-      delete newStocks[payload.stock];
-      const newAllIds = R.filter(id => id !== payload.stock, state.stocks.allIds);
-
-      return {
-        ...state,
-        stocks: {
-          byId: newStocks,
-          allIds: newAllIds
-        }
+        tickers
       };
 
     default:
