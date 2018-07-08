@@ -6,7 +6,7 @@ import {
   FlatList
 } from 'react-native';
 import styles from './StockDetail.style';
-import prettifyNumber from '../helpers/numberUtil';
+import { prettifyNumber } from '../helpers/numberUtil';
 
 const mapping = [
   {

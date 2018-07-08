@@ -2,11 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import styles from './StockItem.style';
-import prettifyNumber from '../helpers/numberUtil';
-
-function isPositive(signStyle) {
-  return signStyle === 'green';
-}
+import { prettifyNumber } from '../helpers/numberUtil';
 
 const StockItem = (props) => {
   const { data } = props;
@@ -25,13 +21,11 @@ const StockItem = (props) => {
       </View>
       <View style={styles.column}>
         <Text style={[styles.percent, { color: signStyle }]}>
-          { isPositive(signStyle) && '+'}
           {percentChange}%
         </Text>
       </View>
       <View style={styles.column}>
         <Text style={[styles.change, { color: signStyle }]}>
-          { isPositive(signStyle) && '+'}
           {change}
         </Text>
       </View>

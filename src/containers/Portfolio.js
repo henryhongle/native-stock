@@ -1,30 +1,32 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import uuid from 'uuid/v4';
-import { View, FlatList, TouchableHighlight } from 'react-native';
-import { PortfolioItem } from '../components';
+import { View, FlatList, TouchableHighlight, Text } from 'react-native';
 import styles from './Portfolio.style';
-
-const transactions = [
-  {
-    id: uuid(),
-    symbol: 'MSFT',
-    numShares: 100,
-    costPerShare: 100.29,
-    fees: 14.00,
-    date: new Date()
-  }, {
-    id: uuid(),
-    symbol: 'APPL',
-    numShares: 10,
-    costPerShare: 180,
-    fees: 14.00,
-    date: new Date()
-  }
-];
+import { getPositions } from '../selectors/portfolioSelectors';
+import { PortfolioItem } from '../components';
 
 class Portfolio extends React.Component {
   keyExtractor = (item, index) => index;
+
+  renderHeader = () => {
+    return (
+      <View style={styles.headerContainer}>
+        <View style={styles.headerColumn}>
+          <Text style={styles.headerFormat}>Ticker</Text>
+        </View>
+        <View style={styles.headerColumn}>
+          <Text style={styles.headerFormat}>Value | Cost</Text>
+        </View>
+        <View style={styles.headerColumn}>
+          <Text style={styles.headerFormat}>Daily</Text>
+        </View>
+        <View style={styles.headerColumn}>
+          <Text style={styles.headerFormat}>Total</Text>
+        </View>
+      </View>
+    );
+  }
 
   renderTransaction = ({ item }) => {
     return (
@@ -45,8 +47,10 @@ class Portfolio extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        {this.renderHeader()}
+        <View style={styles.separator} />
         <FlatList
-          data={transactions}
+          data={this.props.positions}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderTransaction}
         />
@@ -55,12 +59,17 @@ class Portfolio extends React.Component {
   }
 }
 
+Portfolio.propTypes = {
+  positions: PropTypes.array.isRequired
+};
+
 const mapStatetoProps = (state) => {
   return {
+    positions: getPositions(state)
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = () => {
   return {
   };
 };

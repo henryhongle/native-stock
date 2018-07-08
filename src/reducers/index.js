@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { ERRORS } from '../actions/errorActions';
 import stockReducer from './stocks';
+import portfoliosReducer from './portfolios';
 import searchReducer from './search';
 
 const initialState = {
@@ -31,7 +32,8 @@ const errorsReducer = (state = initialState, action) => {
 const AppReducer = combineReducers({
   stocks: stockReducer,
   errors: errorsReducer,
-  search: searchReducer
+  search: searchReducer,
+  portfolios: portfoliosReducer
 });
 
 export default AppReducer;
