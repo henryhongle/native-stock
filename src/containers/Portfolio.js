@@ -2,11 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, FlatList, TouchableHighlight, Text } from 'react-native';
+import { Icon } from 'react-native-elements';
 import styles from './Portfolio.style';
 import { getPositions } from '../selectors/portfolioSelectors';
-import { PortfolioItem } from '../components';
+import { PortfolioItem, PortfolioSummary } from '../components';
+
+const renderMenuButton = navigation => (
+  <View style={{ paddingRight: 10 }}>
+    <Icon name='add' onPress={() => {}} />
+  </View>
+);
 
 class Portfolio extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: 'Portfolio',
+    headerRight: renderMenuButton(navigation)
+  })
+
   keyExtractor = (item, index) => index;
 
   renderHeader = () => {
@@ -45,15 +57,18 @@ class Portfolio extends React.Component {
   }
 
   render() {
+    const { positions } = this.props;
+
     return (
       <View style={styles.container}>
         {this.renderHeader()}
         <View style={styles.separator} />
         <FlatList
-          data={this.props.positions}
+          data={positions}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderTransaction}
         />
+        <PortfolioSummary positions={positions} />
       </View>
     );
   }

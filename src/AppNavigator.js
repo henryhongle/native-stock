@@ -4,7 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import HomePage from './containers/HomePage';
 import Portfolio from './containers/Portfolio';
 import StockDetail from './components/StockDetail';
-import { scale, colors } from './helpers/baseStyles';
+import { scale } from './helpers/baseStyles';
 
 export const StockStack = createStackNavigator({
   Home: {
@@ -40,14 +40,14 @@ export default createBottomTabNavigator(
         if (routeName === 'Market') {
           iconName = `ios-trending-up${focused ? '' : '-outline'}`;
         } else if (routeName === 'Portfolio') {
-          iconName = `ios-folder${focused ? '' : '-outline'}`;
+          iconName = `ios-folder-open${focused ? '' : '-outline'}`;
         }
 
         return <Ionicons name={iconName} size={scale(30)} color={tintColor} />;
       }
     }),
     tabBarOptions: {
-      activeTintColor: colors.green,
+      activeTintColor: 'black',
       showLabel: false
     },
     initialRouteName: 'Market'
