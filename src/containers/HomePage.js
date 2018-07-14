@@ -22,7 +22,7 @@ import {
 
 class HomePage extends React.Component {
   static navigationOptions = {
-    header: <SearchBar />
+    headerTitle: <SearchBar />
   }
 
   componentDidMount() {

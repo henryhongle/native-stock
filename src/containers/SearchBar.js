@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
-import { SearchBar as Search } from 'react-native-elements';
+import { View, TextInput } from 'react-native';
+import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
-import { Constants } from 'expo';
 import { searchTicker, clearTickerSearch } from '../actions/searchActions';
+import styles from './SearchBar.style';
+import { scale } from '../helpers/baseStyles';
 
 const SEARCH_DEBOUNCE = 300;
 
@@ -12,51 +13,77 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.timeout = null;
+    this.state = {
+      searchInput: ''
+    };
   }
 
   componentDidUpdate = (prevProps) => {
     if (prevProps.keyword !== this.props.keyword
       && this.props.keyword === '') {
-      this.search.clearText();
+      this.textInput.clear();
     }
   }
 
-  searchTicker = (ticker) => {
+  searchTicker = (input) => {
+    this.setState({
+      searchInput: input
+    });
+
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
 
-    if (ticker === '') {
+    if (input === '') {
       this.props.clearTickerSearch();
       return;
     }
 
     this.timeout = setTimeout(() => {
-      this.props.searchTicker(ticker);
+      this.props.searchTicker(input);
     }, SEARCH_DEBOUNCE);
+  }
+
+  clearSearch = () => {
+    this.textInput.clear();
+    this.props.clearTickerSearch();
+    this.setState({
+      searchInput: ''
+    });
   }
 
   render() {
     return (
-      <View style={{ paddingTop: Constants.statusBarHeight, backgroundColor: 'white' }}>
-        <Search
-          ref={(search) => { this.search = search; }}
-          lightTheme
+      <View style={styles.container}>
+        <View style={styles.searchIcon}>
+          <Icon name='search' size={scale(22)} color='#000' />
+        </View>
+        <TextInput
+          ref={(input) => { this.textInput = input; }}
+          style={styles.textInput}
           autoCapitalize='characters'
           autoCorrect={false}
           spellCheck={false}
-          placeholder='Search...'
-          onClear={this.props.clearTickerSearch}
+          placeholder='Search'
           onChangeText={this.searchTicker}
-          clearIcon
         />
+        { this.state.searchInput.length > 0 &&
+          <View style={styles.clearIcon}>
+            <Icon
+              name='clear'
+              size={scale(18)}
+              color='#000'
+              onPress={this.clearSearch}
+            />
+          </View>
+        }
       </View>
     );
   }
 }
 
 SearchBar.propTypes = {
-  keyword: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  keyword: PropTypes.string.isRequired,
   searchTicker: PropTypes.func.isRequired,
   clearTickerSearch: PropTypes.func.isRequired
 };
