@@ -17,7 +17,7 @@ const styles = createStyles({
 
   textInput: {
     fontSize: fonts.lg,
-    padding: padding.sm,
+    padding: padding.xs,
     flex: 1
   }
 });

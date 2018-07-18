@@ -22,14 +22,13 @@ class SearchBar extends React.Component {
     if (prevProps.keyword !== this.props.keyword
       && this.props.keyword === '') {
       this.textInput.clear();
+      this.setState({
+        searchInput: ''
+      });
     }
   }
 
   searchTicker = (input) => {
-    this.setState({
-      searchInput: input
-    });
-
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
@@ -38,6 +37,10 @@ class SearchBar extends React.Component {
       this.props.clearTickerSearch();
       return;
     }
+
+    this.setState({
+      searchInput: input
+    });
 
     this.timeout = setTimeout(() => {
       this.props.searchTicker(input);
@@ -72,7 +75,7 @@ class SearchBar extends React.Component {
             <Icon
               name='clear'
               size={scale(18)}
-              color='#000'
+              color='gray'
               onPress={this.clearSearch}
             />
           </View>

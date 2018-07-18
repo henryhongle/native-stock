@@ -1,5 +1,6 @@
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Platform, StatusBar } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import HomePage from './containers/HomePage';
 import Portfolio from './containers/Portfolio';
@@ -54,6 +55,9 @@ export default createBottomTabNavigator(
       activeTintColor: 'black',
       showLabel: false
     },
-    initialRouteName: 'Market'
+    initialRouteName: 'Market',
+    style: {
+      paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight
+    }
   }
 );
