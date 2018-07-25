@@ -12,6 +12,10 @@ export const getPositions = createSelector(
   (positions, stocks) => {
     const result = [];
 
+    if (stocks.allIds.length === 0) {
+      return result;
+    }
+
     R.forEach((id) => {
       const position = positions.byId[id];
       const stock = stocks.byId[position.symbol];
@@ -31,7 +35,6 @@ export const getPositions = createSelector(
 
       result.push(position);
     }, positions.allIds);
-
     return result;
   }
 );

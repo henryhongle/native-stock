@@ -8,16 +8,25 @@ import { getPositions } from '../selectors/portfolioSelectors';
 import { PortfolioItem, PortfolioSummary } from '../components';
 import { getStocks } from '../actions/stockActions';
 
-const renderMenuButton = navigation => (
+const renderAddButton = navigation => (
   <View style={{ paddingRight: 10 }}>
-    <Icon name='add' onPress={() => { navigation.navigate('AddPosition'); }} />
+    <Icon
+      name='add'
+      onPress={() => {
+        navigation.navigate('SearchPage', {
+          onSearchItemSelected: (item) => {
+            navigation.push('AddPosition', { item });
+          }
+        });
+      }}
+    />
   </View>
 );
 
 class Portfolio extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Portfolio',
-    headerRight: renderMenuButton(navigation)
+    headerRight: renderAddButton(navigation)
   })
 
   keyExtractor = (item, index) => index;

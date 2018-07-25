@@ -59,7 +59,12 @@ class SearchBar extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.searchIcon}>
-          <Icon name='search' size={scale(22)} color='#000' />
+          <Icon
+            name='arrow-back'
+            size={scale(22)}
+            color='#000'
+            onPress={this.props.onBackIconSelected}
+          />
         </View>
         <TextInput
           ref={(input) => { this.textInput = input; }}
@@ -88,7 +93,8 @@ class SearchBar extends React.Component {
 SearchBar.propTypes = {
   keyword: PropTypes.string.isRequired,
   searchTicker: PropTypes.func.isRequired,
-  clearTickerSearch: PropTypes.func.isRequired
+  clearTickerSearch: PropTypes.func.isRequired,
+  onBackIconSelected: PropTypes.func.isRequired
 };
 
 const mapStatetoProps = (state) => {

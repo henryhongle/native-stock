@@ -3,36 +3,47 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Swipeout from 'react-native-swipeout';
 import {
-  Text,
   View,
   FlatList,
   TouchableHighlight,
-  Keyboard,
   ActivityIndicator
 } from 'react-native';
+import { Icon } from 'react-native-elements';
 import { getStocks, addStock, deleteStock } from '../actions/stockActions';
-import { clearTickerSearch } from '../actions/searchActions';
 import styles from './HomePage.style';
-import SearchBar from './SearchBar';
 import { getStocksSelector } from '../selectors/stocksSelectors';
 import {
   StockItem,
   FlashMessage
 } from '../components';
 
+const renderAddButton = navigation => (
+  <View style={{ paddingRight: 10 }}>
+    <Icon
+      name='add'
+      onPress={() => {
+        navigation.navigate('SearchPage', {
+          onSearchItemSelected: (item) => {
+            navigation.state.params.addStock(item.symbol);
+            navigation.popToTop();
+          }
+        });
+      }}
+    />
+  </View>
+);
+
 class HomePage extends React.Component {
-  static navigationOptions = {
-    headerTitle: <SearchBar />
-  }
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: 'Watchlist',
+    headerRight: renderAddButton(navigation)
+  })
 
   componentDidMount() {
+    this.props.navigation.setParams({
+      addStock: this.props.addStock
+    });
     this.props.fetchStocks(true);
-  }
-
-  selectSearchedTicker = (item) => {
-    this.props.addStock(item.symbol);
-    this.props.clearTickerSearch();
-    Keyboard.dismiss();
   }
 
   viewStockDetails = (stock) => {
@@ -70,23 +81,6 @@ class HomePage extends React.Component {
     );
   }
 
-  renderSuggestionItem = ({ item }) => {
-    return (
-      <TouchableHighlight
-        underlayColor='#dddddd'
-        onPress={this.selectSearchedTicker.bind(this, item)}
-      >
-        <View>
-          <View style={styles.suggestionContainer}>
-            <Text style={styles.stock}>{item.symbol}</Text>
-            <Text style={styles.stock}>{item.name}</Text>
-          </View>
-          <View style={styles.separator} />
-        </View>
-      </TouchableHighlight>
-    );
-  }
-
   render() {
     const { isStocksFetching } = this.props;
 
@@ -99,7 +93,7 @@ class HomePage extends React.Component {
           </View>
         }
 
-        { !isStocksFetching && this.props.suggestedTickers.length === 0 &&
+        { !isStocksFetching &&
           <FlatList
             style={styles.stocksContainer}
             data={this.props.stocks}
@@ -107,16 +101,6 @@ class HomePage extends React.Component {
             renderItem={this.renderItem}
             onRefresh={this.props.fetchStocks}
             refreshing={this.props.isStocksFetching}
-          />
-        }
-
-        { !isStocksFetching && this.props.suggestedTickers.length !== 0 &&
-          <FlatList
-            style={styles.suggestionContainer}
-            data={this.props.suggestedTickers}
-            keyExtractor={this.keyExtractor}
-            renderItem={this.renderSuggestionItem}
-            keyboardShouldPersistTaps='always'
           />
         }
       </View>
@@ -130,9 +114,7 @@ HomePage.propTypes = {
   addStock: PropTypes.func.isRequired,
   deleteStock: PropTypes.func.isRequired,
   stocks: PropTypes.array.isRequired,
-  isStocksFetching: PropTypes.bool,
-  suggestedTickers: PropTypes.array.isRequired,
-  clearTickerSearch: PropTypes.func.isRequired
+  isStocksFetching: PropTypes.bool
 };
 
 HomePage.defaultProps = {
@@ -142,8 +124,7 @@ HomePage.defaultProps = {
 const mapStatetoProps = (state) => {
   return {
     stocks: getStocksSelector(state),
-    isStocksFetching: state.stocks.isFetching,
-    suggestedTickers: state.search.tickers
+    isStocksFetching: state.stocks.isFetching
   };
 };
 
@@ -151,8 +132,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchStocks: () => dispatch(getStocks()),
     addStock: stock => dispatch(addStock(stock)),
-    deleteStock: stock => dispatch(deleteStock(stock)),
-    clearTickerSearch: () => dispatch(clearTickerSearch())
+    deleteStock: stock => dispatch(deleteStock(stock))
   };
 };
 

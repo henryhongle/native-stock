@@ -5,6 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import HomePage from './containers/HomePage';
 import Portfolio from './containers/Portfolio';
 import AddPosition from './containers/AddPosition';
+import SearchPage from './containers/SearchPage';
 import StockDetail from './components/StockDetail';
 import { scale } from './helpers/baseStyles';
 
@@ -12,14 +13,20 @@ export const StockStack = createStackNavigator({
   Home: {
     screen: HomePage
   },
+  SearchPage: {
+    screen: SearchPage
+  },
   Detail: {
     screen: StockDetail
   }
 });
 
 export const PortfolioStack = createStackNavigator({
-  Porfolio: {
+  Portfolio: {
     screen: Portfolio
+  },
+  SearchPage: {
+    screen: SearchPage
   },
   AddPosition: {
     screen: AddPosition

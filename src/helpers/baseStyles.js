@@ -35,6 +35,12 @@ export const fonts = {
   primary: 'Cochin'
 };
 
+export const buttons = {
+  sm: scale(30),
+  md: scale(40),
+  lg: scale(50)
+};
+
 const baseStyles = {
   container: {
     backgroundColor: '#fff',

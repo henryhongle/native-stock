@@ -61,7 +61,7 @@ export const addStock = stock => (dispatch, getState) => {
   const state = getState();
   const { tickers } = state.stocks;
 
-  if (tickers[stock] !== undefined) {
+  if (tickers.indexOf(stock) !== -1) {
     return;
   }
 

@@ -6,8 +6,10 @@ import { dismissError } from '../actions/errorActions';
 import styles from './FlashMessage.style';
 
 class FlashMessage extends React.Component {
-  componentWillReceiveProps() {
-    this.props.dismissError();
+  componentDidUpdate() {
+    if (this.props.errors.message) {
+      this.props.dismissError();
+    }
   }
 
   render() {
