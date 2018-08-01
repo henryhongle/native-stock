@@ -1,9 +1,9 @@
 import uuid from 'uuid/v4';
+import * as R from 'ramda';
 import { PORTFOLIO } from '../actions/portfolioActions';
 import createReducer from '../helpers/createReducer';
 
 const id1 = uuid();
-
 const INITIAL_STATE = {
   positions: {
     byId: {
@@ -43,9 +43,31 @@ const addPosition = (state, action) => {
   }
 };
 
+const deletePosition = (state, action) => {
+  const { payload, type } = action;
+  const { positions } = state;
+
+  switch (type) {
+    case PORTFOLIO.DELETE_POSITION:
+      const allIds = R.reject(R.equals(payload.id), positions.allIds);
+      const byId = R.reject(R.equals(payload.id), positions.byId);
+      return {
+        ...state,
+        positions: {
+          byId,
+          allIds
+        }
+      };
+
+    default:
+      return state;
+  }
+};
+
 
 const portfoliosReducer = createReducer(INITIAL_STATE, [
-  addPosition
+  addPosition,
+  deletePosition
 ]);
 
 export default portfoliosReducer;

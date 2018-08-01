@@ -4,7 +4,8 @@ import { createTypes } from '../helpers/actionTypes';
 import { STOCK } from './stockActions';
 
 export const PORTFOLIO = createTypes([
-  'ADD_POSITION'
+  'ADD_POSITION',
+  'DELETE_POSITION'
 ], 'PORTFOLIO');
 
 export const addPosition = position => (dispatch, getState) => {
@@ -44,4 +45,13 @@ export const addPosition = position => (dispatch, getState) => {
       }
     });
   }
+};
+
+export const deletePosition = id => (dispatch) => {
+  dispatch({
+    type: PORTFOLIO.DELETE_POSITION,
+    payload: {
+      id
+    }
+  });
 };

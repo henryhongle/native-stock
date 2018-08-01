@@ -36,8 +36,6 @@ export const getPositions = createSelector(
 
       result.push(item);
     }, positions.allIds);
-
-    console.log('result', result);
     return result;
   }
 );

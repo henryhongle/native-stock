@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, FlatList, TouchableHighlight, Text } from 'react-native';
 import { Icon } from 'react-native-elements';
+import Swipeout from 'react-native-swipeout';
 import styles from './Portfolio.style';
 import { getPositions } from '../selectors/portfolioSelectors';
 import { PortfolioItem, PortfolioSummary } from '../components';
 import { getStocks } from '../actions/stockActions';
+import { deletePosition } from '../actions/portfolioActions';
 
 const renderAddButton = navigation => (
   <View style={{ paddingRight: 10 }}>
@@ -51,18 +53,31 @@ class Portfolio extends React.Component {
   }
 
   renderPosition = ({ item }) => {
+    const swipeSettings = {
+      autoClose: true,
+      right: [
+        { onPress: this.props.deletePosition.bind(this, item.id), text: 'Delete', type: 'delete' }
+      ],
+      backgroundColor: 'transparent'
+    };
+
     return (
-      <TouchableHighlight
-        onPress={() => {}}
-        underlayColor='#dddddd'
+      <Swipeout
+        {...swipeSettings}
+        backgroundColor='transparent'
       >
-        <View>
-          <PortfolioItem
-            data={item}
-          />
-          <View style={styles.separator} />
-        </View>
-      </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => {}}
+          underlayColor='#dddddd'
+        >
+          <View>
+            <PortfolioItem
+              data={item}
+            />
+            <View style={styles.separator} />
+          </View>
+        </TouchableHighlight>
+      </Swipeout>
     );
   }
 
@@ -89,7 +104,8 @@ class Portfolio extends React.Component {
 Portfolio.propTypes = {
   positions: PropTypes.array.isRequired,
   fetchStocks: PropTypes.func.isRequired,
-  isStocksFetching: PropTypes.bool.isRequired
+  isStocksFetching: PropTypes.bool.isRequired,
+  deletePosition: PropTypes.func.isRequired
 };
 
 const mapStatetoProps = (state) => {
@@ -101,7 +117,8 @@ const mapStatetoProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchStocks: () => dispatch(getStocks())
+    fetchStocks: () => dispatch(getStocks()),
+    deletePosition: id => dispatch(deletePosition(id))
   };
 };
 
