@@ -65,6 +65,30 @@ const addStock = (state, action) => {
   }
 };
 
+const addStockData = (state, action) => {
+  const { payload, type } = action;
+
+  switch (type) {
+    case STOCK.ADD_STOCK_DATA_SUCCESS:
+      const { newStock } = payload;
+
+      return {
+        ...state,
+        stocks: {
+          byId: {
+            ...state.stocks.byId,
+            [newStock.symbol]: newStock
+          },
+          allIds: [newStock.symbol].concat(state.stocks.allIds)
+        }
+      };
+
+    case STOCK.ADD_STOCK_FAILURE:
+    default:
+      return state;
+  }
+};
+
 const deleteStock = (state, action) => {
   const { payload, type } = action;
 
@@ -85,7 +109,8 @@ const deleteStock = (state, action) => {
 const stockReducer = createReducer(INITIAL_STATE, [
   getStocks,
   addStock,
-  deleteStock
+  deleteStock,
+  addStockData
 ]);
 
 export default stockReducer;

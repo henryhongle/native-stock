@@ -19,22 +19,25 @@ export const getPositions = createSelector(
     R.forEach((id) => {
       const position = positions.byId[id];
       const stock = stocks.byId[position.symbol];
+      const item = R.merge({}, position);
 
       if (stock) {
-        position.totalValue = calcTotalValue(position, stock);
-        position.totalCost = calcTotalCost(position, stock);
+        item.totalValue = calcTotalValue(item, stock);
+        item.totalCost = calcTotalCost(item, stock);
 
-        position.totalGain = calcTotalGain(position.totalValue, position.totalCost);
-        position.totalGainPercent = calcTotalGainPercent(position.totalGain, position.totalCost);
+        item.totalGain = calcTotalGain(item.totalValue, item.totalCost);
+        item.totalGainPercent = calcTotalGainPercent(item.totalGain, item.totalCost);
 
-        const yesterdayTotalValue = calculateYesterdayTotalValue(position, stock);
+        const yesterdayTotalValue = calculateYesterdayTotalValue(item, stock);
 
-        position.dayGain = calcDayGain(yesterdayTotalValue, position.totalValue);
-        position.dayGainPercent = calcDayGainPercent(position.dayGain, yesterdayTotalValue);
+        item.dayGain = calcDayGain(yesterdayTotalValue, item.totalValue);
+        item.dayGainPercent = calcDayGainPercent(item.dayGain, yesterdayTotalValue);
       }
 
-      result.push(position);
+      result.push(item);
     }, positions.allIds);
+
+    console.log('result', result);
     return result;
   }
 );

@@ -12,6 +12,7 @@ module.exports = {
       "no-use-before-define": 0,
       "no-case-declarations": 0,
       "no-param-reassign": 0,
-      "arrow-body-style": 0
+      "arrow-body-style": 0,
+      "react/no-did-update-set-state": 0
     }
 };

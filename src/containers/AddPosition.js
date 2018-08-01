@@ -1,14 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as R from 'ramda';
-import {
-  View,
-  Picker,
-  Text
-} from 'react-native';
+import { View } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
+import { addPosition } from '../actions/portfolioActions';
 import styles from './AddPosition.style';
 
 class AddPosition extends React.Component {
@@ -19,7 +15,7 @@ class AddPosition extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      price: '',
+      costPerShare: '',
       numShares: '',
       fees: '',
       isValidFormState: false,
@@ -28,8 +24,14 @@ class AddPosition extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { price, numShares, fees, date } = this.state;
-    if (prevState.price !== price
+    const {
+      costPerShare,
+      numShares,
+      fees,
+      date
+    } = this.state;
+
+    if (prevState.costPerShare !== costPerShare
       || prevState.numShares !== numShares
       || prevState.fees !== fees
       || prevState.date !== date
@@ -54,9 +56,9 @@ class AddPosition extends React.Component {
     });
   }
 
-  onChangePrice = (price) => {
+  onChangecostPerShare = (costPerShare) => {
     this.setState({
-      price: price.replace(/[^0-9]/g, '')
+      costPerShare: costPerShare.replace(/[^0-9]/g, '')
     });
   }
 
@@ -66,53 +68,34 @@ class AddPosition extends React.Component {
     });
   }
 
-  onAddPosition = () => {
-    this.setState({
-      price: '',
-      numShares: '',
-      fees: '',
-      isValidFormState: false
-    });
-
-    console.log('navigation', this.props.navigation);
-    // this.props.navigation.push('Portfolio');
-    this.props.navigation.popToTop();
-  }
-
   onDateChange = (date) => {
     this.setState({
       date
     });
   }
 
-  validateAndUpdateValidFormState = () => {
-    const { price, numShares, fees } = this.state;
-    if (price !== '' && numShares !== '' && fees !== '') {
-      this.setState({
-        isValidFormState: true
-      });
-    }
+  addPosition = () => {
+    const { navigation } = this.props;
+    const position = {
+      numShares: parseFloat(this.state.numShares),
+      costPerShare: parseFloat(this.state.costPerShare),
+      fees: parseFloat(this.state.fees),
+      date: new Date(this.state.date),
+      symbol: navigation.state.params.item.symbol
+    };
+
+    this.props.addPosition(position);
+    this.props.navigation.popToTop();
   }
 
   isValidFormState = () => {
-    const { price, numShares, fees } = this.state;
-    return price !== '' && numShares !== '' && fees !== '';
-  }
-
-  renderAvailableTickers = () => {
-    const { tickers } = this.props;
-    const options = R.map((ticker) => {
-      return <Picker.Item label={ticker} value={ticker} key={ticker} />;
-    }, tickers);
-
-    return (
-      <Picker
-        selectedValue={this.state.ticker}
-        onValueChange={itemValue => this.setState({ ticker: itemValue })}
-      >
-        {options}
-      </Picker>
-    );
+    const {
+      costPerShare,
+      numShares,
+      fees,
+      date
+    } = this.state;
+    return costPerShare !== '' && numShares !== '' && fees !== '' && date !== null;
   }
 
   render() {
@@ -121,9 +104,9 @@ class AddPosition extends React.Component {
         <View style={styles.inputContainer}>
           <Input
             placeholder='Buy price'
-            value={this.state.price}
+            value={this.state.costPerShare}
             keyboardType='numeric'
-            onChangeText={this.onChangePrice}
+            onChangeText={this.onChangecostPerShare}
           />
           <Input
             value={this.state.numShares}
@@ -153,7 +136,7 @@ class AddPosition extends React.Component {
           disabled={!this.state.isValidFormState}
           buttonStyle={styles.button}
           containerStyle={styles.buttonContainer}
-          onPress={this.onAddPosition}
+          onPress={this.addPosition}
         />
       </View>
     );
@@ -161,18 +144,17 @@ class AddPosition extends React.Component {
 }
 
 AddPosition.propTypes = {
-  tickers: PropTypes.array.isRequired,
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  addPosition: PropTypes.func.isRequired
 };
 
-const mapStatetoProps = (state) => {
-  return {
-    tickers: state.stocks.stocks.allIds
-  };
+const mapStatetoProps = () => {
+  return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    addPosition: position => dispatch(addPosition(position))
   };
 };
 
