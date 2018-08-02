@@ -1,32 +1,40 @@
 import { AsyncStorage } from 'react-native';
 
-const STOCKS = 'STOCKS';
-const DEFAULT = ['AAPL', 'FB', 'MSFT'];
+const STOCKS_PORTFOLIO = 'STOCKS_PORTFOLIO';
 
-function update(stocks) {
-  return AsyncStorage.setItem(STOCKS, JSON.stringify(stocks));
+function update(data) {
+  AsyncStorage.setItem(STOCKS_PORTFOLIO, JSON.stringify(data));
 }
 
-function removeAll() {
-  return AsyncStorage.removeItem(STOCKS);
+function remove() {
+  AsyncStorage.removeItem(STOCKS_PORTFOLIO);
 }
 
 async function get() {
-  try {
-    const tickers = await AsyncStorage.getItem(STOCKS);
-    if (tickers === null) {
-      return DEFAULT;
+  const initial = {
+    tickers: [],
+    positions: {
+      byId: {},
+      allIds: []
     }
-    return JSON.parse(tickers);
+  };
+
+  try {
+    const data = JSON.parse(await AsyncStorage.getItem(STOCKS_PORTFOLIO));
+    if (data === null) {
+      return initial;
+    }
+
+    return data;
   } catch (error) {
     this.removeAll();
-    return DEFAULT;
+    return initial;
   }
 }
 
 const databaseService = {
   update,
-  removeAll,
+  remove,
   get
 };
 

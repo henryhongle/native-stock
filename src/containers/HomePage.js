@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Swipeout from 'react-native-swipeout';
 import {
   View,
+  Text,
   FlatList,
   TouchableHighlight,
   ActivityIndicator
@@ -82,7 +83,7 @@ class HomePage extends React.Component {
   }
 
   render() {
-    const { isStocksFetching } = this.props;
+    const { isStocksFetching, stocks } = this.props;
 
     return (
       <View style={styles.container}>
@@ -93,10 +94,16 @@ class HomePage extends React.Component {
           </View>
         }
 
-        { !isStocksFetching &&
+        { !isStocksFetching && stocks.length === 0 &&
+          <View style={styles.emptyDescription} >
+            <Text style={styles.emptyText}>Add a ticker to your watchlist</Text>
+          </View>
+        }
+
+        { !isStocksFetching && stocks.length > 0 &&
           <FlatList
             style={styles.stocksContainer}
-            data={this.props.stocks}
+            data={stocks}
             keyExtractor={this.keyExtractor}
             renderItem={this.renderItem}
             onRefresh={this.props.fetchStocks}

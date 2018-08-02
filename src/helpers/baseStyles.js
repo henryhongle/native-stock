@@ -59,6 +59,15 @@ const baseStyles = {
   separator: {
     height: 1,
     backgroundColor: colors.lightGray
+  },
+  emptyDescription: {
+    alignSelf: 'center'
+  },
+
+  emptyText: {
+    fontSize: fonts.lg,
+    paddingTop: padding.xl,
+    color: 'gray'
   }
 };
 

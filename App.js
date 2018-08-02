@@ -29,23 +29,30 @@ class App extends React.Component {
       store,
       unsubscribe: null
     };
+
+    
   }
 
   componentDidMount() {
-    AppState.addEventListener('change', this.handleAppStateChange.bind(this));
+    AppState.addEventListener('change', this.handleAppStateChange);
     databaseService.get()
-      .then((persistedTickers) => {
-        const oldData = this.state.store.getState();
-        const newData = {
-          ...oldData,
+      .then((persistedData) => {
+        const { tickers, positions } = persistedData;
+        const state = this.state.store.getState();
+        const newState = {
+          ...state,
           stocks: {
-            ...oldData.stocks,
-            tickers: persistedTickers
+            ...state.stocks,
+            tickers
+          },
+          portfolios: {
+            ...state.portfolios,
+            positions
           }
         };
 
-        const newStore = createStore(AppReducer, newData, applyMiddleware(...middlewares));
-        const unsubscribe = newStore.subscribe(this.handleAppStateChange.bind(this));
+        const newStore = createStore(AppReducer, newState, applyMiddleware(...middlewares));
+        const unsubscribe = newStore.subscribe(this.handleAppStateChange);
         this.setState({
           store: newStore,
           isStoreLoading: false,
@@ -58,13 +65,16 @@ class App extends React.Component {
     if (typeof this.state.unsubscribe === 'function') {
       this.state.unsubscribe();
     }
-    AppState.removeEventListener('change', this.handleAppStateChange.bind(this));
+    AppState.removeEventListener('change', this.handleAppStateChange);
   }
 
-  handleAppStateChange() {
-    const data = this.state.store.getState();
-    const { tickers } = data.stocks;
-    databaseService.update(tickers);
+  handleAppStateChange = () => {
+    const state = this.state.store.getState();
+    const data = {
+      tickers: state.stocks.tickers,
+      positions: state.portfolios.positions
+    };
+    databaseService.update(data);
   }
 
   render() {

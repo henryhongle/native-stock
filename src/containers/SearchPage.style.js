@@ -1,4 +1,4 @@
-import { createStyles, scale, fonts, padding } from '../helpers/baseStyles';
+import { createStyles, scale } from '../helpers/baseStyles';
 
 const styles = createStyles({
   container: {
@@ -8,16 +8,6 @@ const styles = createStyles({
 
   suggestionContainer: {
     padding: scale(5)
-  },
-
-  emptyDescription: {
-    alignSelf: 'center'
-  },
-
-  emptyText: {
-    fontSize: fonts.lg,
-    paddingTop: padding.xl,
-    color: 'gray'
   }
 });
 

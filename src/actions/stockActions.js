@@ -5,6 +5,7 @@ import { createTypes, asyncVariants } from '../helpers/actionTypes';
 export const STOCK = createTypes([
   asyncVariants('GET_STOCKS'),
   asyncVariants('ADD_STOCK'),
+  asyncVariants('ADD_STOCK_DATA'),
   asyncVariants('DELETE_STOCK')
 ], 'STOCK');
 

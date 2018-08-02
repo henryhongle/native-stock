@@ -87,7 +87,11 @@ class Portfolio extends React.Component {
     return (
       <View style={styles.container}>
         {this.renderHeader()}
-        <View style={styles.separator} />
+        { positions.length === 0 &&
+          <View style={styles.emptyDescription} >
+            <Text style={styles.emptyText}>Add a position to your portfolio</Text>
+          </View>
+        }
         <FlatList
           data={positions}
           keyExtractor={this.keyExtractor}
