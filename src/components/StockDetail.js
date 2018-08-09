@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import styles from './StockDetail.style';
 import { prettifyNumber } from '../helpers/numberUtil';
+import { renderBackButton } from './Header';
 
 const mapping = [
   {
@@ -107,6 +108,7 @@ const keyExtractor = (item, index) => index;
 
 class StockDetail extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
+    headerLeft: renderBackButton(navigation),
     title: navigation.state.params.stock.symbol
   });
 
