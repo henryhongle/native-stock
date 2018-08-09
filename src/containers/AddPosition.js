@@ -7,6 +7,9 @@ import DatePicker from 'react-native-datepicker';
 import { addPosition } from '../actions/portfolioActions';
 import styles from './AddPosition.style';
 
+// const validNumber = RegExp(/\^d+(\.\d{0,2})?$/);
+const validNumber = RegExp(/^\d+\.?\d{0,2}?$/);
+
 class AddPosition extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: navigation.state.params.item.symbol
@@ -19,6 +22,9 @@ class AddPosition extends React.Component {
       numShares: '',
       fees: '',
       isValidFormState: false,
+      isValidNumShares: false,
+      isValidCostPerShare: false,
+      isValidFees: false,
       date: null
     };
   }
@@ -51,27 +57,59 @@ class AddPosition extends React.Component {
   }
 
   onChangeNumShares = (numShares) => {
-    this.setState({
-      numShares: numShares.replace(/[^0-9]/g, '')
-    });
+    if (validNumber.test(numShares)) {
+      this.setState({
+        numShares,
+        isValidNumShares: true
+      });
+    } else {
+      this.setState({
+        numShares,
+        isValidNumShares: false
+      });
+    }
   }
 
   onChangecostPerShare = (costPerShare) => {
     this.setState({
       costPerShare: costPerShare.replace(/[^0-9]/g, '')
     });
+
+    if (validNumber.test(costPerShare)) {
+      this.setState({
+        costPerShare,
+        isValidCostPerShare: true
+      });
+    } else {
+      this.setState({
+        costPerShare,
+        isValidCostPerShare: false
+      });
+    }
   }
 
   onChangeFees = (fees) => {
-    this.setState({
-      fees: fees.replace(/[^0-9]/g, '')
-    });
+    if (validNumber.test(fees)) {
+      this.setState({
+        fees,
+        isValidFees: true
+      });
+    } else {
+      this.setState({
+        fees,
+        isValidFees: false
+      });
+    }
   }
 
   onDateChange = (date) => {
     this.setState({
       date
     });
+  }
+
+  getValidNumberErrorMessage = (isValid) => {
+    return !isValid ? 'Enter a valid number' : null;
   }
 
   addPosition = () => {
@@ -99,6 +137,11 @@ class AddPosition extends React.Component {
   }
 
   render() {
+    const { isValidNumShares, isValidCostPerShare, isValidFees } = this.state;
+    const numSharesErr = this.getValidNumberErrorMessage(isValidNumShares);
+    const costPerShareErr = this.getValidNumberErrorMessage(isValidCostPerShare);
+    const feesErr = this.getValidNumberErrorMessage(isValidFees);
+
     return (
       <View style={styles.container} >
         <View style={styles.inputContainer}>
@@ -107,18 +150,21 @@ class AddPosition extends React.Component {
             value={this.state.costPerShare}
             keyboardType='numeric'
             onChangeText={this.onChangecostPerShare}
+            errorMessage={costPerShareErr}
           />
           <Input
             value={this.state.numShares}
             placeholder='Number of shares'
             keyboardType='numeric'
             onChangeText={this.onChangeNumShares}
+            errorMessage={numSharesErr}
           />
           <Input
             value={this.state.fees}
             placeholder='Transaction fees'
             keyboardType='numeric'
             onChangeText={this.onChangeFees}
+            errorMessage={feesErr}
           />
           <DatePicker
             style={styles.datePicker}
