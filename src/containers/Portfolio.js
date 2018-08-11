@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, FlatList, TouchableHighlight, Text } from 'react-native';
-import { Icon } from 'react-native-elements';
+import Feather from 'react-native-vector-icons/Feather';
 import Swipeout from 'react-native-swipeout';
 import styles from './Portfolio.style';
 import { getPositions } from '../selectors/portfolioSelectors';
@@ -11,9 +11,10 @@ import { getStocks } from '../actions/stockActions';
 import { deletePosition } from '../actions/portfolioActions';
 
 const renderAddButton = navigation => (
-  <View style={{ paddingRight: 10 }}>
-    <Icon
-      name='add'
+  <View style={{ paddingRight: 12 }}>
+    <Feather
+      name='search'
+      size={24}
       onPress={() => {
         navigation.navigate('SearchPage', {
           onSearchItemSelected: (item) => {

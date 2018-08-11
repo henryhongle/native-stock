@@ -9,7 +9,7 @@ import {
   TouchableHighlight,
   ActivityIndicator
 } from 'react-native';
-import { Icon } from 'react-native-elements';
+import Feather from 'react-native-vector-icons/Feather';
 import { getStocks, addStock, deleteStock } from '../actions/stockActions';
 import styles from './HomePage.style';
 import { getStocksSelector } from '../selectors/stocksSelectors';
@@ -18,10 +18,17 @@ import {
   FlashMessage
 } from '../components';
 
+const iconStyles = {
+  paddingRight: 12,
+  flexDirection: 'row',
+  alignItems: 'center'
+};
+
 const renderAddButton = navigation => (
-  <View style={{ paddingRight: 10 }}>
-    <Icon
-      name='add'
+  <View style={iconStyles}>
+    <Feather
+      name='search'
+      size={24}
       onPress={() => {
         navigation.navigate('SearchPage', {
           onSearchItemSelected: (item) => {

@@ -7,6 +7,7 @@ import Portfolio from './containers/Portfolio';
 import AddPosition from './containers/AddPosition';
 import SearchPage from './containers/SearchPage';
 import StockDetail from './components/StockDetail';
+import Login from './containers/Login';
 import { scale } from './helpers/baseStyles';
 
 export const StockStack = createStackNavigator({
@@ -18,6 +19,9 @@ export const StockStack = createStackNavigator({
   },
   Detail: {
     screen: StockDetail
+  },
+  Login: {
+    screen: Login
   }
 });
 
