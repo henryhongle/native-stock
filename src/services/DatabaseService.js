@@ -24,7 +24,6 @@ async function get() {
     if (data === null) {
       return initial;
     }
-
     return data;
   } catch (error) {
     this.removeAll();

@@ -4,6 +4,8 @@ const EXCHANGE_CODES = ['ASE', 'NYQ', 'NAS', 'NGM', 'NMS', 'NYS'];
 const STOCKS_API = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=#STOCKS#';
 const SUGGESTIONS_API = 'http://d.yimg.com/aq/autoc?query=#STOCK#&region=US&lang=en-US';
 
+const errMsg = 'Oops..Something failed';
+
 function getTickers(stocks) {
   if (!Array.isArray(stocks)) {
     if (typeof stocks === 'string') {
@@ -17,43 +19,28 @@ function getTickers(stocks) {
   return fetch(STOCKS_API.replace('#STOCKS#', queryString));
 }
 
-function getStocksData(tickers) {
-  return getTickers(tickers)
-    .then(response => response.json())
-    .then(json => json.quoteResponse.result)
-    .catch((error) => {
-      if (error instanceof TypeError) {
-        throw new Error(error.message);
-      }
-    });
+async function getStocksData(tickers) {
+  try {
+    const response = await getTickers(tickers);
+    const data = await response.json();
+    return data.quoteResponse.result;
+  } catch (error) {
+    throw new Error(errMsg);
+  }
 }
 
-function getSuggestions(suggestion) {
-  const q = SUGGESTIONS_API.replace('#STOCK#', suggestion.toUpperCase());
-  return fetch(q)
-    .then((response) => {
-      return response.json();
-    })
-    .then((json) => {
-      const tickers = json.ResultSet.Result;
-      if (tickers && tickers.length !== 0) {
-        return R.filter((ticker) => {
-          if (EXCHANGE_CODES.indexOf(ticker.exch) !== -1) {
-            return ticker;
-          }
-          return null;
-        }, tickers);
-      }
-
-      return [];
-    })
-    .catch((error) => {
-      if (error instanceof TypeError) {
-        throw new Error(error.message);
-      } else {
-        throw new Error('Oops..Something failed');
-      }
-    });
+async function getSuggestions(suggestion) {
+  const api = SUGGESTIONS_API.replace('#STOCK#', suggestion.toUpperCase());
+  try {
+    const response = await fetch(api);
+    const data = await response.json();
+    const tickers = R.pathOr([], ['ResultSet', 'Result'])(data);
+    return R.filter((ticker) => {
+      return EXCHANGE_CODES.indexOf(ticker.exch) !== -1;
+    }, tickers);
+  } catch (error) {
+    throw new Error(errMsg);
+  }
 }
 
 const stockService = {
