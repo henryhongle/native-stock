@@ -1,10 +1,15 @@
 export function prettifyNumber(num) {
-  const decIndex = num.indexOf('.');
-  if (decIndex !== -1) {
-    return num.substring(0, decIndex + 3);
+  if (num === null || num === undefined) {
+    return 0;
   }
-  return num;
-};
+
+  const data = num.toString();
+  const decIndex = data.indexOf('.');
+  if (decIndex !== -1) {
+    return data.substring(0, decIndex + 3);
+  }
+  return data;
+}
 
 export function numberWithCommas(x) {
   const parts = x.toString().split('.');

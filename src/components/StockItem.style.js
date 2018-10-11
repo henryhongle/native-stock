@@ -1,38 +1,51 @@
-import { createStyles, scale, padding } from '../helpers/baseStyles';
+import { createStyles, padding, fonts } from '../helpers/baseStyles';
 
 const styles = createStyles({
   container: {
     flex: 1,
-    padding: padding.md,
-    height: scale(36),
+    flexDirection: 'column',
+    paddingTop: padding.sm,
+    paddingBottom: padding.sm,
+    paddingLeft: padding.md,
+    paddingRight: padding.md
+  },
+  primary: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
   },
-
+  secondary: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: padding.sm
+  },
   column: {
     flex: 1
   },
-
   symbol: {
     textAlign: 'left',
-    fontSize: scale(14)
+    fontSize: fonts.md
   },
-
+  afterHours: {
+    textAlign: 'left',
+    fontSize: fonts.sm,
+    fontStyle: 'italic'
+  },
   price: {
     textAlign: 'right',
     color: 'grey',
-    fontSize: scale(14)
+    fontSize: fonts.md
   },
 
   percent: {
     textAlign: 'right',
-    fontSize: scale(14)
+    fontSize: fonts.md
   },
 
   change: {
     textAlign: 'right',
-    fontSize: scale(14)
+    fontSize: fonts.md
   }
 });
 

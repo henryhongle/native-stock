@@ -1,31 +1,30 @@
-import { createStyles, scale, colors } from '../helpers/baseStyles';
+import { createStyles, colors, padding, fonts } from '../helpers/baseStyles';
 
 const styles = createStyles({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    paddingRight: scale(10)
+    paddingLeft: padding.sm,
+    paddingRight: padding.sm
   },
   itemContainer: {
-    padding: scale(5),
+    paddingTop: padding.sm,
+    paddingBottom: padding.sm,
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    minHeight: scale(36)
+    alignItems: 'center'
   },
   separator: {
     height: 1,
     backgroundColor: colors.lightGray
   },
   label: {
-    paddingLeft: 10,
     flexGrow: 1,
-    fontSize: scale(14)
+    fontSize: fonts.md
   },
   info: {
     flexGrow: 1,
-    fontSize: scale(14),
-    justifyContent: 'flex-end',
+    fontSize: fonts.md,
     textAlign: 'right'
   }
 });

@@ -40,7 +40,7 @@ const PortfolioItem = ({ data }) => {
           { prettifyNumber(numberWithCommas(dayGain)) }
         </Text>
         <Text style={[styles.secondary, { color: daySignStyle }]}>
-          { prettifyNumber(dayGainPercent.toString()) }%
+          { prettifyNumber(dayGainPercent) }%
         </Text>
       </View>
 
@@ -49,7 +49,7 @@ const PortfolioItem = ({ data }) => {
           { prettifyNumber(numberWithCommas(totalGain)) }
         </Text>
         <Text style={[styles.secondary, { color: totalSignStyle }]}>
-          { prettifyNumber(totalGainPercent.toString()) }%
+          { prettifyNumber(totalGainPercent) }%
         </Text>
       </View>
     </View>
