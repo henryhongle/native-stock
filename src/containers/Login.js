@@ -5,7 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import styles from './Login.style';
 import { renderBackButton } from '../components/Header';
 
-class Login extends React.Component {
+class Login extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
     headerLeft: renderBackButton(navigation),
     title: 'Login'

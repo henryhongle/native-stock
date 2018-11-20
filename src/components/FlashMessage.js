@@ -5,7 +5,7 @@ import { Text, View } from 'react-native';
 import { dismissError } from '../actions/errorActions';
 import styles from './FlashMessage.style';
 
-class FlashMessage extends React.Component {
+class FlashMessage extends React.PureComponent {
   componentDidUpdate() {
     if (this.props.errors.message) {
       this.props.dismissError();

@@ -13,7 +13,7 @@ import styles from './SearchPage.style';
 import SearchBar from './SearchBar';
 import { FlashMessage } from '../components';
 
-class SearchPage extends React.Component {
+class SearchPage extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
     headerLeft: null,
     headerTitle: <SearchBar onBackIconSelected={() => { navigation.goBack(); }} />

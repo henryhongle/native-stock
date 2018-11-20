@@ -26,7 +26,7 @@ const renderAddButton = navigation => (
   </View>
 );
 
-class Portfolio extends React.Component {
+class Portfolio extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Portfolio',
     headerRight: renderAddButton(navigation)

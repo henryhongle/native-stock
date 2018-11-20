@@ -29,8 +29,6 @@ class App extends React.Component {
       store,
       unsubscribe: null
     };
-
-    
   }
 
   componentDidMount() {

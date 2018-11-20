@@ -10,7 +10,7 @@ import styles from './AddPosition.style';
 // const validNumber = RegExp(/\^d+(\.\d{0,2})?$/);
 const validNumber = RegExp(/^\d+\.?\d{0,2}?$/);
 
-class AddPosition extends React.Component {
+class AddPosition extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: navigation.state.params.item.symbol
   })

@@ -41,7 +41,7 @@ const renderAddButton = navigation => (
   </View>
 );
 
-class HomePage extends React.Component {
+class HomePage extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Watchlist',
     headerRight: renderAddButton(navigation)

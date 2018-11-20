@@ -9,7 +9,7 @@ import { scale } from '../helpers/baseStyles';
 
 const SEARCH_DEBOUNCE = 300;
 
-class SearchBar extends React.Component {
+class SearchBar extends React.PureComponent {
   constructor(props) {
     super(props);
     this.timeout = null;
